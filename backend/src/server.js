@@ -17,7 +17,7 @@ app.use('/api', routes)
 // Ruta de salud
 app.get('/', (req, res) => {
   res.json({
-    mensaje: '🔧 API Ferretería Nasca funcionando (datos en memoria, sin base de datos)',
+    mensaje: '🔧 API Ferretería Nasca funcionando (con conexin a MySQL)',
     version: '1.0.0',
     endpoints: '/api'
   })
@@ -36,5 +36,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`)
-  console.log('📦 Datos en memoria (sin base de datos) — se reinician al reiniciar el servidor')
+  console.log('📦 Base de datos configurada (con MySQL) — se reinician al reiniciar el servidor')
 })
