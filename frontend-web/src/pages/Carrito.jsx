@@ -146,7 +146,10 @@ export function Checkout() {
 
         {paso === 1 && (
           <>
-            <h1 style={{ fontSize: '20px', fontWeight: '500', marginBottom: '20px' }}>📋 Confirmar pedido</h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h1 style={{ fontSize: '20px', fontWeight: '500' }}>📋 Confirmar pedido</h1>
+              <button onClick={vaciar} style={{ background: 'transparent', border: '0.5px solid #E24B4A', color: '#E24B4A', padding: '6px 12px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}>Vaciar carrito</button>
+            </div>
             <p style={{ fontSize: '13px', color: '#555', marginBottom: '20px' }}>
               Hola <strong style={{ color: '#f0f0f0' }}>{cliente?.nombre}</strong>, revisa tu pedido antes de pagar.
             </p>
