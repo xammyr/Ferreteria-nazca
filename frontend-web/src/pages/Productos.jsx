@@ -50,6 +50,7 @@ export default function Productos() {
         buscar: busqueda || undefined,
         categoria_id: catActiva || undefined,
         solo_activos: true,
+        solo_web: true,
         limit: 60
       },
       headers: { 'Cache-Control': 'no-cache' }

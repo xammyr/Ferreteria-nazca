@@ -36,7 +36,7 @@ export default function Home() {
   useEffect(() => {
     Promise.all([
       api.get('/categorias'),
-      api.get('/productos', { params: { solo_activos: true, limit: 12 } })
+      api.get('/productos', { params: { solo_activos: true, solo_web: true, limit: 12 } })
     ]).then(([cats, prods]) => {
       setCategorias(cats.data)
       setProductos(prods.data.productos)
@@ -45,7 +45,7 @@ export default function Home() {
 
   function filtrarPorCategoria(id) {
     setCatActiva(id)
-    api.get('/productos', { params: { categoria_id: id, solo_activos: true, limit: 12 } })
+    api.get('/productos', { params: { categoria_id: id, solo_activos: true, solo_web: true, limit: 12 } })
       .then(r => setProductos(r.data.productos))
   }
 
