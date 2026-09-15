@@ -1,89 +1,161 @@
-const { productos, categorias, nextProductoId } = require('../data/store')
-
-function conCategoria(producto) {
-  const categoria = categorias.find(c => c.id === producto.categoria_id) || null
-  return { ...producto, categorias: categoria }
-}
+const prisma = require('../lib/prisma')
 
 // GET /api/productos
-function listar(req, res) {
-  const { categoria_id, buscar, solo_activos, page = 1, limit = 20 } = req.query
-
-  let resultado = [...productos]
-  if (solo_activos === 'true') resultado = resultado.filter(p => p.activo)
-  if (categoria_id) resultado = resultado.filter(p => p.categoria_id === parseInt(categoria_id))
-  if (buscar) resultado = resultado.filter(p => p.nombre.toLowerCase().includes(buscar.toLowerCase()))
-
-  const total = resultado.length
+async function listar(req, res) {
+  const { categoria_id, buscar, solo_web, solo_chatbot, solo_activos, page = 1, limit = 20 } = req.query
   const skip = (parseInt(page) - 1) * parseInt(limit)
-  const pagina = resultado.slice(skip, skip + parseInt(limit)).map(conCategoria)
 
-  res.json({ productos: pagina, total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)) })
+  const where = {}
+  if (solo_activos === 'true') where.activo = true
+  if (categoria_id) where.categoria_id = parseInt(categoria_id)
+  if (solo_web === 'true') where.visible_web = true
+  if (solo_chatbot === 'true') where.visible_chatbot = true
+  if (buscar) where.nombre = { contains: buscar }
+
+  try {
+    const [productos, total] = await Promise.all([
+      prisma.productos.findMany({
+        where,
+        include: { categorias: true },
+        skip,
+        take: parseInt(limit),
+        orderBy: { nombre: 'asc' }
+      }),
+      prisma.productos.count({ where })
+    ])
+    res.json({ productos, total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)) })
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
+  }
 }
 
 // GET /api/productos/:id
-function obtener(req, res) {
-  const producto = productos.find(p => p.id === parseInt(req.params.id))
-  if (!producto) return res.status(404).json({ error: 'Producto no encontrado' })
-  res.json(conCategoria(producto))
+async function obtener(req, res) {
+  try {
+    const producto = await prisma.productos.findUnique({
+      where: { id: parseInt(req.params.id) },
+      include: { categorias: true }
+    })
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' })
+    }
+    res.json(producto)
+  } catch (err) {
+    res.status(500).json({
+      error: 'Error interno',
+      detalle: err.message
+    })
+  }
 }
 
 // POST /api/productos
-function crear(req, res) {
-  const { codigo, nombre, descripcion, categoria_id,
-          precio_compra, precio_venta, unidad, stock_actual, stock_minimo } = req.body
+async function crear(req, res) {
+  const { codigo, nombre, descripcion, categoria_id, proveedor_id,
+          precio_compra, precio_venta, unidad, stock_actual, stock_minimo,
+          imagen_url, visible_web, visible_chatbot } = req.body
 
   if (!codigo || !nombre || !precio_venta)
     return res.status(400).json({ error: 'codigo, nombre y precio_venta son requeridos' })
 
-  if (productos.some(p => p.codigo === codigo))
-    return res.status(400).json({ error: 'El código ya existe' })
+  try {
+    const producto = await prisma.productos.create({
+      data: {
+        codigo, nombre, descripcion,
+        categoria_id: categoria_id ? parseInt(categoria_id) : null,
+        proveedor_id: proveedor_id ? parseInt(proveedor_id) : null,
+        precio_compra: parseFloat(precio_compra || 0),
+        precio_venta: parseFloat(precio_venta),
+        unidad, imagen_url,
+        stock_actual: parseInt(stock_actual || 0),
+        stock_minimo: parseInt(stock_minimo || 5),
+        visible_web: visible_web !== false,
+        visible_chatbot: visible_chatbot !== false,
+      }
+    })
 
-  const producto = {
-    id: nextProductoId(),
-    codigo, nombre, descripcion: descripcion || null,
-    categoria_id: categoria_id ? parseInt(categoria_id) : null,
-    precio_compra: parseFloat(precio_compra || 0),
-    precio_venta: parseFloat(precio_venta),
-    unidad: unidad || 'unidad',
-    stock_actual: parseInt(stock_actual || 0),
-    stock_minimo: parseInt(stock_minimo || 5),
-    activo: true
+    // Registrar movimiento de inventario si hay stock inicial
+    if (parseInt(stock_actual) > 0) {
+      await prisma.inventario_movimientos.create({
+        data: {
+          producto_id: producto.id,
+          tipo: 'entrada',
+          cantidad: parseInt(stock_actual),
+          stock_anterior: 0,
+          stock_nuevo: parseInt(stock_actual),
+          referencia: 'Stock inicial',
+          usuario_id: req.usuario.id
+        }
+      })
+    }
+
+    res.status(201).json(producto)
+  } catch (err) {
+    if (err.code === 'P2002') return res.status(400).json({ error: 'El código ya existe' })
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
   }
-  productos.push(producto)
-
-  res.status(201).json(producto)
 }
 
 // PUT /api/productos/:id
-function actualizar(req, res) {
-  const producto = productos.find(p => p.id === parseInt(req.params.id))
-  if (!producto) return res.status(404).json({ error: 'Producto no encontrado' })
+async function actualizar(req, res) {
+  const { codigo, nombre, descripcion, categoria_id, proveedor_id,
+          precio_compra, precio_venta, unidad, stock_minimo,
+          imagen_url, visible_web, visible_chatbot, activo } = req.body
 
-  const { codigo, nombre, descripcion, categoria_id,
-          precio_compra, precio_venta, unidad, stock_actual, stock_minimo, activo } = req.body
-
-  if (codigo !== undefined) producto.codigo = codigo
-  if (nombre !== undefined) producto.nombre = nombre
-  if (descripcion !== undefined) producto.descripcion = descripcion
-  if (categoria_id !== undefined) producto.categoria_id = categoria_id ? parseInt(categoria_id) : null
-  if (precio_compra !== undefined) producto.precio_compra = parseFloat(precio_compra)
-  if (precio_venta !== undefined) producto.precio_venta = parseFloat(precio_venta)
-  if (unidad !== undefined) producto.unidad = unidad
-  if (stock_actual !== undefined) producto.stock_actual = parseInt(stock_actual)
-  if (stock_minimo !== undefined) producto.stock_minimo = parseInt(stock_minimo)
-  if (activo !== undefined) producto.activo = activo
-
-  res.json(producto)
+  try {
+    const producto = await prisma.productos.update({
+      where: { id: parseInt(req.params.id) },
+      data: {
+        codigo, nombre, descripcion,
+        categoria_id: categoria_id ? parseInt(categoria_id) : undefined,
+        proveedor_id: proveedor_id ? parseInt(proveedor_id) : undefined,
+        precio_compra: precio_compra ? parseFloat(precio_compra) : undefined,
+        precio_venta: precio_venta ? parseFloat(precio_venta) : undefined,
+        unidad, imagen_url,
+        stock_minimo: stock_minimo ? parseInt(stock_minimo) : undefined,
+        visible_web, visible_chatbot, activo
+      }
+    })
+    res.json(producto)
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
+  }
 }
 
 // DELETE /api/productos/:id (soft delete)
-function eliminar(req, res) {
-  const producto = productos.find(p => p.id === parseInt(req.params.id))
-  if (!producto) return res.status(404).json({ error: 'Producto no encontrado' })
-
-  producto.activo = false
-  res.json({ mensaje: 'Producto desactivado' })
+async function eliminar(req, res) {
+  try {
+    await prisma.productos.update({
+      where: { id: parseInt(req.params.id) },
+      data: { activo: false }
+    })
+    res.json({ mensaje: 'Producto desactivado' })
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
+  }
 }
 
-module.exports = { listar, obtener, crear, actualizar, eliminar }
+// GET /api/productos/stock-bajo
+async function stockBajo(req, res) {
+  try {
+    const productos = await prisma.productos.findMany({
+      where: {
+        activo: true,
+        AND: [{ stock_actual: { lte: prisma.productos.fields.stock_minimo } }]
+      },
+      include: { categorias: true }
+    })
+    // Filtro manual porque Prisma no permite comparar dos campos directamente
+    const resultado = await prisma.$queryRaw`
+      SELECT p.*, c.nombre as categoria_nombre
+      FROM productos p
+      LEFT JOIN categorias c ON p.categoria_id = c.id
+      WHERE p.activo = true AND p.stock_actual <= p.stock_minimo
+      ORDER BY p.stock_actual ASC
+    `
+    res.json(resultado)
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
+  }
+}
+
+module.exports = { listar, obtener, crear, actualizar, eliminar, stockBajo }
