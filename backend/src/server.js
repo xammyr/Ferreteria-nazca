@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const routes = require('./routes/index')
+const pool = require('./config/db')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -17,7 +18,7 @@ app.use('/api', routes)
 // Ruta de salud
 app.get('/', (req, res) => {
   res.json({
-    mensaje: '🔧 API Ferretería Nasca funcionando (con conexin a MySQL)',
+    mensaje: '🔧 API Ferretería Nasca funcionando (con conexión a MySQL)',
     version: '1.0.0',
     endpoints: '/api'
   })
@@ -34,7 +35,21 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Error interno del servidor' })
 })
 
-app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`)
-  console.log('📦 Base de datos configurada (con MySQL) — se reinician al reiniciar el servidor')
-})
+async function iniciar() {
+  try {
+    const conexion = await pool.getConnection()
+    await conexion.ping()
+    conexion.release()
+    console.log('✅ Conexión a MySQL establecida correctamente')
+  } catch (err) {
+    console.error('❌ No se pudo conectar a la base de datos MySQL:', err.message)
+    console.error('   Revisa DB_HOST, DB_USER, DB_PASSWORD y DB_NAME en tu archivo .env')
+    console.error('   y que hayas importado bd/ferreteria_nazca.sql')
+  }
+
+  app.listen(PORT, () => {
+    console.log(`✅ Servidor corriendo en http://localhost:${PORT}`)
+  })
+}
+
+iniciar()

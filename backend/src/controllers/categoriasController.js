@@ -1,22 +1,45 @@
-const { categorias, nextCategoriaId } = require('../data/store')
+const pool = require('../config/db')
 
 // GET /api/categorias
-function listar(req, res) {
-  res.json(categorias.filter(c => c.activa))
+async function listar(req, res) {
+  try {
+    const [rows] = await pool.query(
+      'SELECT id, nombre, descripcion, activa FROM categorias WHERE activa = true ORDER BY nombre'
+    )
+    const categorias = rows.map(c => ({ ...c, activa: !!c.activa }))
+    res.json(categorias)
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
+  }
 }
 
 // POST /api/categorias
-function crear(req, res) {
+async function crear(req, res) {
   const { nombre, descripcion } = req.body
   if (!nombre) return res.status(400).json({ error: 'nombre es requerido' })
 
-  if (categorias.some(c => c.nombre === nombre))
-    return res.status(400).json({ error: 'La categoría ya existe' })
+  try {
+    const [existentes] = await pool.query(
+      'SELECT id FROM categorias WHERE nombre = ?',
+      [nombre]
+    )
+    if (existentes.length > 0)
+      return res.status(400).json({ error: 'La categoría ya existe' })
 
-  const categoria = { id: nextCategoriaId(), nombre, descripcion: descripcion || null, activa: true }
-  categorias.push(categoria)
+    const [resultado] = await pool.query(
+      'INSERT INTO categorias (nombre, descripcion, activa) VALUES (?, ?, true)',
+      [nombre, descripcion || null]
+    )
 
-  res.status(201).json(categoria)
+    res.status(201).json({
+      id: resultado.insertId,
+      nombre,
+      descripcion: descripcion || null,
+      activa: true
+    })
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
+  }
 }
 
 module.exports = { listar, crear }

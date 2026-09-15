@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model categorias {
+  id          Int         @id @default(autoincrement())
+  nombre      String      @db.VarChar(100)
+  descripcion String?     @db.Text
+  activa      Boolean?    @default(true)
+  productos   productos[]
+}
+
+model productos {
+  id            Int         @id @default(autoincrement())
+  codigo        String      @unique(map: "codigo") @db.VarChar(50)
+  nombre        String      @db.VarChar(150)
+  descripcion   String?     @db.Text
+  categoria_id  Int?
+  precio_compra Decimal     @db.Decimal(10, 2)
+  precio_venta  Decimal     @db.Decimal(10, 2)
+  unidad        String?     @default("unidad") @db.VarChar(50)
+  stock_actual  Int?        @default(0)
+  stock_minimo  Int?        @default(0)
+  activo        Boolean?    @default(true)
+  categorias    categorias? @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "productos_ibfk_1")
+
+  @@index([categoria_id], map: "categoria_id")
+}
+
+model usuarios {
+  id       Int           @id @default(autoincrement())
+  nombre   String        @db.VarChar(100)
+  email    String        @unique(map: "email") @db.VarChar(150)
+  password String        @db.VarChar(255)
+  rol      usuarios_rol? @default(vendedor)
+  activo   Boolean?      @default(true)
+}
+
+enum usuarios_rol {
+  admin
+  vendedor
+}

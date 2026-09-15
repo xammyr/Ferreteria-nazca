@@ -1,6 +1,6 @@
+const prisma = require('../lib/prisma')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { usuarios, nextUsuarioId } = require('../data/store')
 
 // POST /api/auth/login
 async function login(req, res) {
@@ -10,7 +10,7 @@ async function login(req, res) {
     return res.status(400).json({ error: 'Email y password requeridos' })
 
   try {
-    const usuario = usuarios.find(u => u.email === email)
+    const usuario = await prisma.usuarios.findUnique({ where: { email } })
 
     if (!usuario || !usuario.activo)
       return res.status(401).json({ error: 'Credenciales incorrectas' })
@@ -30,6 +30,7 @@ async function login(req, res) {
       usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: usuario.rol }
     })
   } catch (err) {
+    console.error('ERROR LOGIN:', err)
     res.status(500).json({ error: 'Error interno', detalle: err.message })
   }
 }
@@ -45,15 +46,13 @@ async function register(req, res) {
     return res.status(400).json({ error: 'Rol inválido' })
 
   try {
-    const existe = usuarios.find(u => u.email === email)
+    const existe = await prisma.usuarios.findUnique({ where: { email } })
     if (existe) return res.status(400).json({ error: 'Email ya registrado' })
 
     const hash = await bcrypt.hash(password, 10)
-    const usuario = {
-      id: nextUsuarioId(),
-      nombre, email, password: hash, rol, activo: true
-    }
-    usuarios.push(usuario)
+    const usuario = await prisma.usuarios.create({
+      data: { nombre, email, password: hash, rol }
+    })
 
     res.status(201).json({
       id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: usuario.rol
