@@ -1,12 +1,12 @@
-const pool = require('../config/db')
+const prisma = require('../lib/prisma')
 
 // GET /api/categorias
 async function listar(req, res) {
   try {
-    const [rows] = await pool.query(
-      'SELECT id, nombre, descripcion, activa FROM categorias WHERE activa = true ORDER BY nombre'
-    )
-    const categorias = rows.map(c => ({ ...c, activa: !!c.activa }))
+    const categorias = await prisma.categorias.findMany({
+      where: { activa: true },
+      orderBy: { nombre: 'asc' }
+    })
     res.json(categorias)
   } catch (err) {
     res.status(500).json({ error: 'Error interno', detalle: err.message })
@@ -15,28 +15,19 @@ async function listar(req, res) {
 
 // POST /api/categorias
 async function crear(req, res) {
-  const { nombre, descripcion } = req.body
+  const { nombre, descripcion, icono } = req.body
   if (!nombre) return res.status(400).json({ error: 'nombre es requerido' })
 
   try {
-    const [existentes] = await pool.query(
-      'SELECT id FROM categorias WHERE nombre = ?',
-      [nombre]
-    )
-    if (existentes.length > 0)
+    const existentes = await prisma.categorias.findFirst({ where: { nombre } })
+    if (existentes)
       return res.status(400).json({ error: 'La categoría ya existe' })
 
-    const [resultado] = await pool.query(
-      'INSERT INTO categorias (nombre, descripcion, activa) VALUES (?, ?, true)',
-      [nombre, descripcion || null]
-    )
-
-    res.status(201).json({
-      id: resultado.insertId,
-      nombre,
-      descripcion: descripcion || null,
-      activa: true
+    const categoria = await prisma.categorias.create({
+      data: { nombre, descripcion: descripcion || null, icono: icono || null, activa: true }
     })
+
+    res.status(201).json(categoria)
   } catch (err) {
     res.status(500).json({ error: 'Error interno', detalle: err.message })
   }

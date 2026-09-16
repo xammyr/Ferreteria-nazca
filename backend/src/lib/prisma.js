@@ -1,9 +1,7 @@
-const { PrismaClient } = require('../../generated/prisma')
+const { PrismaClient } = require('@prisma/client')
 
-const { PrismaMariaDb } = require('@prisma/adapter-mariadb')
+const prisma = new PrismaClient({
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
+})
 
-const adapter = new PrismaMariaDb(process.env.DATABASE_URL)
-
-const prisma = new PrismaClient({ adapter })
-
-module.exports = prisma
+module.exports = prisma

@@ -1,6 +1,9 @@
 {
-  "dependencies": {
-    "@prisma/adapter-pg": "^7.8.0",
-    "pg": "^8.20.0"
+  "name": "ferreteria-nazca",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend-web",
+    "prisma:generate": "npm run prisma:generate --prefix backend"
   }
 }

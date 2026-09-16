@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const routes = require('./routes/index')
-const pool = require('./config/db')
+const prisma = require('./lib/prisma')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -18,7 +18,7 @@ app.use('/api', routes)
 // Ruta de salud
 app.get('/', (req, res) => {
   res.json({
-    mensaje: '🔧 API Ferretería Nasca funcionando (con conexión a MySQL)',
+    mensaje: '🔧 API Ferretería Nasca funcionando (PostgreSQL / Prisma)',
     version: '1.0.0',
     endpoints: '/api'
   })
@@ -37,14 +37,11 @@ app.use((err, req, res, next) => {
 
 async function iniciar() {
   try {
-    const conexion = await pool.getConnection()
-    await conexion.ping()
-    conexion.release()
-    console.log('✅ Conexión a MySQL establecida correctamente')
+    await prisma.$connect()
+    console.log('✅ Conexión a PostgreSQL establecida correctamente con Prisma')
   } catch (err) {
-    console.error('❌ No se pudo conectar a la base de datos MySQL:', err.message)
-    console.error('   Revisa DB_HOST, DB_USER, DB_PASSWORD y DB_NAME en tu archivo .env')
-    console.error('   y que hayas importado bd/ferreteria_nazca.sql')
+    console.error('❌ No se pudo conectar a la base de datos PostgreSQL:', err.message)
+    console.error('   Revisa la variable DATABASE_URL en tu archivo .env')
   }
 
   app.listen(PORT, () => {

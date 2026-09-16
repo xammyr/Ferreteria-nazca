@@ -137,14 +137,6 @@ async function eliminar(req, res) {
 // GET /api/productos/stock-bajo
 async function stockBajo(req, res) {
   try {
-    const productos = await prisma.productos.findMany({
-      where: {
-        activo: true,
-        AND: [{ stock_actual: { lte: prisma.productos.fields.stock_minimo } }]
-      },
-      include: { categorias: true }
-    })
-    // Filtro manual porque Prisma no permite comparar dos campos directamente
     const resultado = await prisma.$queryRaw`
       SELECT p.*, c.nombre as categoria_nombre
       FROM productos p

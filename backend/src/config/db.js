@@ -1,15 +1,5 @@
-const mysql = require('mysql2/promise');
+// Configuración de base de datos delegada a Prisma ORM (PostgreSQL)
+const prisma = require('../lib/prisma')
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'usuario',
-  password: process.env.DB_PASSWORD || 'contraseña',
-  database: process.env.DB_NAME || 'ferreteria_nazca',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  decimalNumbers: true,
-  charset: 'utf8mb4'
-})
+module.exports = prisma
 
-module.exports = pool;
