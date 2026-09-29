@@ -31,16 +31,16 @@ export default function LoginCliente() {
 
   const inp = (label, key, type = 'text', placeholder = '') => (
     <div style={{ marginBottom: '14px' }}>
-      <label style={{ fontSize: '11px', color: '#555', letterSpacing: '1px', display: 'block', marginBottom: '6px' }}>
+      <label style={{ fontSize: '11px', color: '#6b7280', letterSpacing: '1px', display: 'block', marginBottom: '6px' }}>
         {label}
       </label>
       <input
         type={type} value={form[key]} placeholder={placeholder}
         onChange={e => setForm({ ...form, [key]: e.target.value })} required
         style={{
-          width: '100%', padding: '11px 14px', background: '#1a1a1a',
+          width: '100%', padding: '11px 14px', background: '#ffffff',
           border: '0.5px solid #2a2a2a', borderRadius: '8px',
-          color: '#f0f0f0', fontSize: '14px', outline: 'none', boxSizing: 'border-box'
+          color: '#1f2937', fontSize: '14px', outline: 'none', boxSizing: 'border-box'
         }}
       />
     </div>
@@ -48,12 +48,12 @@ export default function LoginCliente() {
 
   return (
     <div style={{
-      minHeight: '100vh', background: '#0a0a0a',
+      minHeight: '100vh', background: '#f9fafb',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontFamily: "'IBM Plex Sans', sans-serif", padding: '24px'
     }}>
       <div style={{
-        background: '#111', border: '0.5px solid #2a2a2a',
+        background: '#ffffff', border: '0.5px solid #2a2a2a',
         borderRadius: '16px', padding: '40px', width: '100%', maxWidth: '420px'
       }}>
         {/* Logo */}
@@ -63,15 +63,15 @@ export default function LoginCliente() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '24px', margin: '0 auto 12px'
           }}>🔧</div>
-          <div style={{ fontSize: '18px', fontWeight: '600', color: '#f0f0f0' }}>Ferretería Nasca</div>
-          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>
+          <div style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>Ferretería Nasca</div>
+          <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
             {modo === 'login' ? 'Inicia sesión para continuar' : 'Crea tu cuenta'}
           </div>
         </div>
 
         {/* Tabs */}
         <div style={{
-          display: 'flex', background: '#1a1a1a',
+          display: 'flex', background: '#ffffff',
           border: '0.5px solid #2a2a2a', borderRadius: '8px',
           padding: '3px', marginBottom: '24px'
         }}>
@@ -79,7 +79,7 @@ export default function LoginCliente() {
             <button key={val} onClick={() => { setModo(val); setError('') }} style={{
               flex: 1, padding: '9px', borderRadius: '6px', border: 'none', cursor: 'pointer',
               background: modo === val ? '#F5C100' : 'transparent',
-              color: modo === val ? '#0a0a0a' : '#555',
+              color: modo === val ? '#f9fafb' : '#6b7280',
               fontWeight: modo === val ? '600' : '400',
               fontSize: '13px', transition: 'all 0.15s'
             }}>{lbl}</button>
@@ -104,8 +104,8 @@ export default function LoginCliente() {
 
           <button type="submit" disabled={cargando} style={{
             width: '100%', padding: '13px', borderRadius: '8px', border: 'none',
-            background: cargando ? '#555' : '#F5C100',
-            color: '#0a0a0a', fontSize: '14px', fontWeight: '600',
+            background: cargando ? '#6b7280' : '#F5C100',
+            color: '#1f2937', fontSize: '14px', fontWeight: '600',
             cursor: cargando ? 'not-allowed' : 'pointer', marginTop: '4px'
           }}>
             {cargando ? 'Procesando...' : modo === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
@@ -113,7 +113,7 @@ export default function LoginCliente() {
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <Link to="/" style={{ color: '#555', fontSize: '13px', textDecoration: 'none' }}>
+          <Link to="/" style={{ color: '#6b7280', fontSize: '13px', textDecoration: 'none' }}>
             ← Volver al inicio
           </Link>
         </div>

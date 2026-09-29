@@ -98,7 +98,7 @@ export default function Producto() {
                 <button onClick={handleAgregar} style={{
                   flex: 1, padding: '14px', borderRadius: '12px', border: 'none',
                   background: agregado ? '#10b981' : 'linear-gradient(135deg, #f97316, #ea580c)',
-                  color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.3s'
+                  color: '#1f2937', fontSize: '15px', fontWeight: '700', cursor: 'pointer', transition: 'background 0.3s'
                 }}>
                   {agregado ? '✅ Agregado al carrito' : '🛒 Agregar al carrito'}
                 </button>

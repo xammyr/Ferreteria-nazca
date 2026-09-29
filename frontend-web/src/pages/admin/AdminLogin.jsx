@@ -30,7 +30,7 @@ export default function AdminLogin() {
 
   return (
     <div style={{
-      background: '#0a0a0a',
+      background: '#f9fafb',
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
@@ -39,7 +39,7 @@ export default function AdminLogin() {
       fontFamily: "'IBM Plex Sans', sans-serif"
     }}>
       <div style={{
-        background: '#141414',
+        background: '#ffffff',
         border: '1px solid #282828',
         borderRadius: '14px',
         padding: '36px',
@@ -52,8 +52,8 @@ export default function AdminLogin() {
             width: '48px', height: '48px', background: '#F5C100', borderRadius: '10px',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', marginBottom: '14px'
           }}>🔧</div>
-          <h1 style={{ fontSize: '20px', fontWeight: '700', color: '#fff', margin: '0 0 6px 0' }}>Panel Administrativo</h1>
-          <p style={{ fontSize: '13px', color: '#777', margin: 0 }}>Acceso para personal de Ferretería Nazca</p>
+          <h1 style={{ fontSize: '20px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>Panel Administrativo</h1>
+          <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>Acceso para personal de Ferretería Nazca</p>
         </div>
 
         {error && (
@@ -67,7 +67,7 @@ export default function AdminLogin() {
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#bbb', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4b5563', marginBottom: '6px' }}>
               Correo Electrónico
             </label>
             <input
@@ -77,14 +77,14 @@ export default function AdminLogin() {
               required
               placeholder="admin@nasca.com"
               style={{
-                width: '100%', boxSizing: 'border-box', padding: '11px 14px', background: '#1c1c1c',
-                border: '1px solid #333', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none'
+                width: '100%', boxSizing: 'border-box', padding: '11px 14px', background: '#f9fafb',
+                border: '1px solid #333', borderRadius: '8px', color: '#1f2937', fontSize: '14px', outline: 'none'
               }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#bbb', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4b5563', marginBottom: '6px' }}>
               Contraseña
             </label>
             <input
@@ -94,8 +94,8 @@ export default function AdminLogin() {
               required
               placeholder="••••••••"
               style={{
-                width: '100%', boxSizing: 'border-box', padding: '11px 14px', background: '#1c1c1c',
-                border: '1px solid #333', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none'
+                width: '100%', boxSizing: 'border-box', padding: '11px 14px', background: '#f9fafb',
+                border: '1px solid #333', borderRadius: '8px', color: '#1f2937', fontSize: '14px', outline: 'none'
               }}
             />
           </div>
@@ -104,7 +104,7 @@ export default function AdminLogin() {
             type="submit"
             disabled={cargando}
             style={{
-              marginTop: '8px', padding: '12px', background: '#F5C100', color: '#0a0a0a',
+              marginTop: '8px', padding: '12px', background: '#F5C100', color: '#1f2937',
               border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '14px',
               cursor: cargando ? 'wait' : 'pointer', opacity: cargando ? 0.7 : 1
             }}

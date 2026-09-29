@@ -1,12 +1,13 @@
+import { Package, Search, Plus, Filter, Download, X, Eye, Check, Truck, AlertCircle, Clock, CheckCircle2, ChevronRight, Edit, Trash2 } from 'lucide-react'
 ﻿import { useState, useEffect } from 'react'
 import api from '../../services/api'
 import { useSearchParams } from 'react-router-dom'
 
 const estados = {
-  pendiente:  { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', label: '⏳ Pendiente' },
-  pagado:     { color: '#22c55e', bg: 'rgba(34,197,94,0.1)',  label: '✅ Pagado' },
-  despachado: { color: '#38bdf8', bg: 'rgba(56,189,248,0.1)', label: '🚚 Despachado' },
-  cancelado:  { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',  label: '❌ Cancelado' },
+  pendiente:  { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', label: 'Pendiente', icon: <Clock size={12} style={{marginRight:'4px'}}/> },
+  pagado:     { color: '#22c55e', bg: 'rgba(34,197,94,0.1)',  label: 'Pagado', icon: <CheckCircle2 size={12} style={{marginRight:'4px'}}/> },
+  despachado: { color: '#38bdf8', bg: 'rgba(56,189,248,0.1)', label: 'Despachado', icon: <Truck size={12} style={{marginRight:'4px'}}/> },
+  cancelado:  { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',  label: 'Cancelado', icon: <X size={12} style={{marginRight:'4px'}}/> },
 }
 
 export default function AdminVentas() {
@@ -46,18 +47,18 @@ export default function AdminVentas() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#fff', margin: '0 0 6px 0' }}>Gestión de Pedidos & Ventas</h1>
-          <p style={{ fontSize: '13px', color: '#777', margin: 0 }}>Validación de pagos Yape y despacho de mercadería</p>
+          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>Gestión de Pedidos & Ventas</h1>
+          <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>Validación de pagos Yape y despacho de mercadería</p>
         </div>
 
         {/* Filtros de Estado */}
-        <div style={{ display: 'flex', gap: '6px', background: '#141414', padding: '4px', borderRadius: '8px', border: '1px solid #282828' }}>
+        <div style={{ display: 'flex', gap: '6px', background: '#ffffff', padding: '4px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
           {[
             { key: '', label: 'Todos' },
-            { key: 'pendiente', label: '⏳ Pendientes' },
-            { key: 'pagado', label: '✅ Pagados' },
-            { key: 'despachado', label: '🚚 Despachados' },
-            { key: 'cancelado', label: '❌ Cancelados' },
+            { key: 'pendiente', label: 'Pendientes' },
+            { key: 'pagado', label: 'Pagados' },
+            { key: 'despachado', label: 'Despachados' },
+            { key: 'cancelado', label: 'Cancelados' },
           ].map(f => (
             <button
               key={f.key}
@@ -65,7 +66,7 @@ export default function AdminVentas() {
               style={{
                 padding: '7px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600',
                 background: estadoFiltro === f.key ? '#F5C100' : 'transparent',
-                color: estadoFiltro === f.key ? '#0a0a0a' : '#888',
+                color: estadoFiltro === f.key ? '#f9fafb' : '#6b7280',
                 border: 'none', cursor: 'pointer'
               }}
             >
@@ -78,7 +79,7 @@ export default function AdminVentas() {
       {cargando ? (
         <div style={{ textAlign: 'center', padding: '60px', fontSize: '28px' }}>⏳ Cargando pedidos...</div>
       ) : ventas.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px', background: '#141414', borderRadius: '10px', color: '#666' }}>
+        <div style={{ textAlign: 'center', padding: '60px', background: '#ffffff', borderRadius: '10px', color: '#4b5563' }}>
           No hay pedidos en este estado.
         </div>
       ) : (
@@ -89,19 +90,19 @@ export default function AdminVentas() {
 
             return (
               <div key={v.id} style={{
-                background: '#141414', border: '1px solid #242424', borderRadius: '10px', padding: '18px 20px',
+                background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', borderRadius: '10px', padding: '18px 20px',
                 display: 'flex', flexDirection: 'column', gap: '14px'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '16px', fontWeight: '700', color: '#fff' }}>#{v.numero}</span>
+                    <span style={{ fontSize: '16px', fontWeight: '700', color: '#1f2937' }}>#{v.numero}</span>
                     <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '600', background: est.bg, color: est.color }}>
                       {est.label}
                     </span>
-                    <span style={{ fontSize: '12px', color: '#666' }}>
+                    <span style={{ fontSize: '12px', color: '#4b5563' }}>
                       {new Date(v.creado_en).toLocaleDateString('es-PE', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    <span style={{ fontSize: '11px', background: '#1e1e1e', padding: '2px 8px', borderRadius: '4px', color: '#888' }}>
+                    <span style={{ fontSize: '11px', background: '#f3f4f6', padding: '2px 8px', borderRadius: '4px', color: '#6b7280' }}>
                       Canal: {v.canal}
                     </span>
                   </div>
@@ -111,31 +112,31 @@ export default function AdminVentas() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', borderTop: '1px solid #202020', paddingTop: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', borderTop: '1px solid #e5e7eb', paddingTop: '12px' }}>
                   {/* Datos del Cliente y Notas */}
                   <div>
-                    <div style={{ fontSize: '11px', color: '#777', textTransform: 'uppercase', marginBottom: '4px' }}>Cliente / Contacto</div>
-                    <div style={{ fontSize: '13px', color: '#ddd' }}>
+                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '4px' }}>Cliente / Contacto</div>
+                    <div style={{ fontSize: '13px', color: '#374151' }}>
                       {v.clientes ? (
                         <>
                           <strong>{v.clientes.nombre}</strong> ({v.clientes.telefono || 'Sin teléfono'})<br />
-                          <span style={{ color: '#888', fontSize: '12px' }}>{v.clientes.email} | {v.clientes.direccion || 'Sin dirección'}</span>
+                          <span style={{ color: '#6b7280', fontSize: '12px' }}>{v.clientes.email} | {v.clientes.direccion || 'Sin dirección'}</span>
                         </>
                       ) : (
                         <span>Venta en Tienda (Presencial)</span>
                       )}
                     </div>
-                    {v.notas && <div style={{ fontSize: '12px', color: '#999', marginTop: '6px', fontStyle: 'italic' }}>📝 {v.notas}</div>}
+                    {v.notas && <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '6px', fontStyle: 'italic' }}><Edit size={12} style={{marginRight:'4px'}}/> {v.notas}</div>}
                   </div>
 
                   {/* Ítems comprados */}
                   <div>
-                    <div style={{ fontSize: '11px', color: '#777', textTransform: 'uppercase', marginBottom: '4px' }}>Detalle de Productos</div>
+                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '4px' }}>Detalle de Productos</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                       {v.venta_items?.map(it => (
-                        <div key={it.id} style={{ fontSize: '12.5px', color: '#bbb', display: 'flex', justifyContent: 'space-between' }}>
+                        <div key={it.id} style={{ fontSize: '12.5px', color: '#4b5563', display: 'flex', justifyContent: 'space-between' }}>
                           <span>• {it.nombre_producto} <strong>x{it.cantidad}</strong></span>
-                          <span style={{ color: '#888' }}>S/ {parseFloat(it.subtotal).toFixed(2)}</span>
+                          <span style={{ color: '#6b7280' }}>S/ {parseFloat(it.subtotal).toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
@@ -145,7 +146,7 @@ export default function AdminVentas() {
                 {/* Barra de Acciones y Comprobante */}
                 <div style={{
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px',
-                  borderTop: '1px solid #202020', paddingTop: '12px'
+                  borderTop: '1px solid #e5e7eb', paddingTop: '12px'
                 }}>
                   <div>
                     {v.comprobante_url ? (
@@ -159,7 +160,7 @@ export default function AdminVentas() {
                         👁️ Ver Comprobante Yape
                       </button>
                     ) : (
-                      <span style={{ fontSize: '12px', color: '#666' }}>Sin comprobante adjunto</span>
+                      <span style={{ fontSize: '12px', color: '#4b5563' }}>Sin comprobante adjunto</span>
                     )}
                   </div>
 
@@ -169,7 +170,7 @@ export default function AdminVentas() {
                         disabled={accionandoId === v.id}
                         onClick={() => handleCambiarEstado(v.id, 'pagado')}
                         style={{
-                          background: '#22c55e', color: '#0a0a0a', border: 'none', padding: '7px 14px', borderRadius: '6px',
+                          background: '#22c55e', color: '#1f2937', border: 'none', padding: '7px 14px', borderRadius: '6px',
                           fontSize: '12px', fontWeight: '700', cursor: 'pointer'
                         }}
                       >
@@ -182,7 +183,7 @@ export default function AdminVentas() {
                         disabled={accionandoId === v.id}
                         onClick={() => handleCambiarEstado(v.id, 'despachado')}
                         style={{
-                          background: '#38bdf8', color: '#0a0a0a', border: 'none', padding: '7px 14px', borderRadius: '6px',
+                          background: '#38bdf8', color: '#1f2937', border: 'none', padding: '7px 14px', borderRadius: '6px',
                           fontSize: '12px', fontWeight: '700', cursor: 'pointer'
                         }}
                       >
@@ -221,7 +222,7 @@ export default function AdminVentas() {
             <button
               onClick={() => setModalImg(null)}
               style={{
-                position: 'absolute', top: '-12px', right: '-12px', background: '#F5C100', color: '#0a0a0a',
+                position: 'absolute', top: '-12px', right: '-12px', background: '#F5C100', color: '#1f2937',
                 border: 'none', borderRadius: '50%', width: '32px', height: '32px', fontWeight: '700', fontSize: '16px', cursor: 'pointer'
               }}
             >

@@ -1,3 +1,4 @@
+import { Package, Search, Plus, Filter, Download, X, Eye, Check, Truck, AlertCircle, Clock, CheckCircle2, ChevronRight, Edit, Trash2 } from 'lucide-react'
 ﻿import { useState } from 'react'
 import api from '../../services/api'
 
@@ -37,7 +38,7 @@ export default function AdminReportes() {
       descripcion: 'Valorización total del stock en Soles (S/), cálculo de existencias, productos con stock bajo o agotado y últimos movimientos.',
       endpoint: '/reportes/inventario',
       filename: `Reporte_Inventario_${new Date().toISOString().slice(0, 10)}.xlsx`,
-      icono: '📦',
+      icono: '',
       badge: 'Almacén & Logística'
     },
     {
@@ -53,14 +54,14 @@ export default function AdminReportes() {
   return (
     <div>
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#fff', margin: '0 0 6px 0' }}>Descarga de Reportes Oficiales</h1>
-        <p style={{ fontSize: '13px', color: '#777', margin: 0 }}>Hojas de cálculo Excel (.xlsx) con formato contable profesional y fórmulas de suma</p>
+        <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>Descarga de Reportes Oficiales</h1>
+        <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>Hojas de cálculo Excel (.xlsx) con formato contable profesional y fórmulas de suma</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
         {reportes.map((rep, idx) => (
           <div key={idx} style={{
-            background: '#141414', border: '1px solid #242424', borderRadius: '12px', padding: '24px',
+            background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', borderRadius: '12px', padding: '24px',
             display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '16px'
           }}>
             <div>
@@ -70,8 +71,8 @@ export default function AdminReportes() {
                   {rep.badge}
                 </span>
               </div>
-              <h2 style={{ fontSize: '16px', fontWeight: '600', color: '#fff', margin: '0 0 8px 0' }}>{rep.titulo}</h2>
-              <p style={{ fontSize: '13px', color: '#888', lineHeight: 1.5, margin: 0 }}>{rep.descripcion}</p>
+              <h2 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', margin: '0 0 8px 0' }}>{rep.titulo}</h2>
+              <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: 1.5, margin: 0 }}>{rep.descripcion}</p>
             </div>
 
             <button
@@ -79,7 +80,7 @@ export default function AdminReportes() {
               disabled={descargando === rep.endpoint}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                padding: '11px', background: '#F5C100', color: '#0a0a0a', border: 'none', borderRadius: '8px',
+                padding: '11px', background: '#F5C100', color: '#1f2937', border: 'none', borderRadius: '8px',
                 fontWeight: '700', fontSize: '13px', cursor: descargando === rep.endpoint ? 'wait' : 'pointer',
                 opacity: descargando === rep.endpoint ? 0.7 : 1
               }}

@@ -8,8 +8,8 @@ const YAPE_NUMERO = '999888777'
 const YAPE_NOMBRE = 'Ferretería Nasca'
 const YAPE_QR_URL = 'https://i.imgur.com/dIOlG6n.jpeg'
 
-const S = { background: '#0a0a0a', minHeight: '100vh', color: '#f0f0f0', fontFamily: "'IBM Plex Sans', sans-serif" }
-const card = { background: '#1a1a1a', border: '0.5px solid #2a2a2a', borderRadius: '12px' }
+const S = { background: '#f9fafb', minHeight: '100vh', color: '#1f2937', fontFamily: "'IBM Plex Sans', sans-serif" }
+const card = { background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px' }
 
 export function Carrito() {
   const { items, quitar, cambiarCantidad, total } = useCarrito()
@@ -19,9 +19,9 @@ export function Carrito() {
     <div style={{ ...S, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px' }}>
       <div style={{ fontSize: '64px', marginBottom: '16px' }}>🛒</div>
       <h2 style={{ fontSize: '20px', fontWeight: '500', marginBottom: '8px' }}>Tu carrito está vacío</h2>
-      <p style={{ color: '#555', marginBottom: '24px', fontSize: '14px' }}>Agrega productos del catálogo</p>
+      <p style={{ color: '#6b7280', marginBottom: '24px', fontSize: '14px' }}>Agrega productos del catálogo</p>
       <Link to="/productos" style={{
-        padding: '12px 28px', background: '#F5C100', color: '#0a0a0a',
+        padding: '12px 28px', background: '#F5C100', color: '#1f2937',
         borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '14px'
       }}>Ver productos</Link>
     </div>
@@ -39,19 +39,19 @@ export function Carrito() {
               borderBottom: i < items.length - 1 ? '0.5px solid #222' : 'none'
             }}>
               <div style={{
-                width: '56px', height: '56px', background: '#111', borderRadius: '8px',
+                width: '56px', height: '56px', background: '#ffffff', borderRadius: '8px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0
               }}>
                 {item.categorias?.icono || '📦'}
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: '500', fontSize: '14px', marginBottom: '3px' }}>{item.nombre}</div>
-                <div style={{ fontSize: '12px', color: '#555' }}>S/ {parseFloat(item.precio_venta).toFixed(2)} c/u</div>
+                <div style={{ fontSize: '12px', color: '#6b7280' }}>S/ {parseFloat(item.precio_venta).toFixed(2)} c/u</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', border: '0.5px solid #2a2a2a', borderRadius: '8px', overflow: 'hidden' }}>
-                <button onClick={() => cambiarCantidad(item.id, item.cantidad - 1)} style={{ padding: '7px 12px', border: 'none', background: '#111', color: '#f0f0f0', cursor: 'pointer', fontSize: '16px' }}>−</button>
+              <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden' }}>
+                <button onClick={() => cambiarCantidad(item.id, item.cantidad - 1)} style={{ padding: '7px 12px', border: 'none', background: '#ffffff', color: '#1f2937', cursor: 'pointer', fontSize: '16px' }}>−</button>
                 <span style={{ padding: '7px 14px', fontWeight: '600', fontSize: '14px' }}>{item.cantidad}</span>
-                <button onClick={() => cambiarCantidad(item.id, item.cantidad + 1)} style={{ padding: '7px 12px', border: 'none', background: '#111', color: '#f0f0f0', cursor: 'pointer', fontSize: '16px' }}>+</button>
+                <button onClick={() => cambiarCantidad(item.id, item.cantidad + 1)} style={{ padding: '7px 12px', border: 'none', background: '#ffffff', color: '#1f2937', cursor: 'pointer', fontSize: '16px' }}>+</button>
               </div>
               <div style={{ fontWeight: '600', color: '#F5C100', fontSize: '16px', minWidth: '80px', textAlign: 'right' }}>
                 S/ {(parseFloat(item.precio_venta) * item.cantidad).toFixed(2)}
@@ -74,12 +74,12 @@ export function Carrito() {
         <div style={{ display: 'flex', gap: '12px' }}>
           <button onClick={() => navigate('/productos')} style={{
             flex: 1, padding: '13px', borderRadius: '8px',
-            border: '0.5px solid #2a2a2a', background: 'transparent',
-            color: '#888', fontSize: '14px', cursor: 'pointer'
+            border: '1px solid #e5e7eb', background: 'transparent',
+            color: '#6b7280', fontSize: '14px', cursor: 'pointer'
           }}>← Seguir comprando</button>
           <button onClick={() => navigate('/checkout')} style={{
             flex: 2, padding: '13px', borderRadius: '8px', border: 'none',
-            background: '#F5C100', color: '#0a0a0a', fontSize: '14px',
+            background: '#F5C100', color: '#1f2937', fontSize: '14px',
             fontWeight: '600', cursor: 'pointer'
           }}>Pagar con Yape 📱</button>
         </div>
@@ -150,13 +150,13 @@ export function Checkout() {
               <h1 style={{ fontSize: '20px', fontWeight: '500' }}>📋 Confirmar pedido</h1>
               <button onClick={vaciar} style={{ background: 'transparent', border: '0.5px solid #E24B4A', color: '#E24B4A', padding: '6px 12px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}>Vaciar carrito</button>
             </div>
-            <p style={{ fontSize: '13px', color: '#555', marginBottom: '20px' }}>
-              Hola <strong style={{ color: '#f0f0f0' }}>{cliente?.nombre}</strong>, revisa tu pedido antes de pagar.
+            <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '20px' }}>
+              Hola <strong style={{ color: '#1f2937' }}>{cliente?.nombre}</strong>, revisa tu pedido antes de pagar.
             </p>
-            <div style={{ background: '#111', borderRadius: '8px', padding: '16px', marginBottom: '20px' }}>
+            <div style={{ background: '#ffffff', borderRadius: '8px', padding: '16px', marginBottom: '20px' }}>
               {items.map(i => (
                 <div key={i.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
-                  <span style={{ color: '#888' }}>{i.nombre} x{i.cantidad}</span>
+                  <span style={{ color: '#6b7280' }}>{i.nombre} x{i.cantidad}</span>
                   <span style={{ color: '#F5C100' }}>S/ {(parseFloat(i.precio_venta) * i.cantidad).toFixed(2)}</span>
                 </div>
               ))}
@@ -167,7 +167,7 @@ export function Checkout() {
             </div>
             <button onClick={confirmarPedido} disabled={enviando} style={{
               width: '100%', padding: '14px', borderRadius: '8px', border: 'none',
-              background: enviando ? '#555' : '#F5C100', color: '#0a0a0a',
+              background: enviando ? '#6b7280' : '#F5C100', color: '#1f2937',
               fontSize: '15px', fontWeight: '600', cursor: enviando ? 'not-allowed' : 'pointer'
             }}>
               {enviando ? 'Procesando...' : 'Confirmar y ver QR Yape →'}
@@ -178,25 +178,25 @@ export function Checkout() {
         {paso === 2 && (
           <>
             <h1 style={{ fontSize: '20px', fontWeight: '500', marginBottom: '8px', textAlign: 'center' }}>📱 Paga con Yape</h1>
-            <p style={{ fontSize: '13px', color: '#555', textAlign: 'center', marginBottom: '24px' }}>Escanea el QR o transfiere al número indicado</p>
+            <p style={{ fontSize: '13px', color: '#6b7280', textAlign: 'center', marginBottom: '24px' }}>Escanea el QR o transfiere al número indicado</p>
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <div style={{ border: '2px solid #F5C100', borderRadius: '12px', padding: '16px', display: 'inline-block', background: '#111' }}>
+              <div style={{ border: '2px solid #F5C100', borderRadius: '12px', padding: '16px', display: 'inline-block', background: '#ffffff' }}>
                 <img src={YAPE_QR_URL} alt="QR Yape" style={{ width: '180px', height: '180px', borderRadius: '8px', display: 'block' }} />
               </div>
               <div style={{ fontSize: '28px', fontWeight: '600', color: '#F5C100', margin: '12px 0 4px' }}>S/ {total.toFixed(2)}</div>
-              <div style={{ fontSize: '12px', color: '#555' }}>Monto exacto a transferir</div>
+              <div style={{ fontSize: '12px', color: '#6b7280' }}>Monto exacto a transferir</div>
             </div>
-            <div style={{ background: '#111', borderRadius: '8px', padding: '16px', marginBottom: '20px' }}>
+            <div style={{ background: '#ffffff', borderRadius: '8px', padding: '16px', marginBottom: '20px' }}>
               {[['Número', `📱 ${YAPE_NUMERO}`], ['A nombre de', YAPE_NOMBRE], ['Monto', `S/ ${total.toFixed(2)}`]].map(([k, v]) => (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '6px 0', borderBottom: '0.5px solid #1a1a1a' }}>
-                  <span style={{ color: '#555' }}>{k}</span>
-                  <span style={{ color: '#f0f0f0', fontWeight: '500' }}>{v}</span>
+                  <span style={{ color: '#6b7280' }}>{k}</span>
+                  <span style={{ color: '#1f2937', fontWeight: '500' }}>{v}</span>
                 </div>
               ))}
             </div>
             <button onClick={() => setPaso(3)} style={{
               width: '100%', padding: '13px', borderRadius: '8px', border: 'none',
-              background: '#F5C100', color: '#0a0a0a', fontSize: '14px', fontWeight: '600', cursor: 'pointer'
+              background: '#F5C100', color: '#1f2937', fontSize: '14px', fontWeight: '600', cursor: 'pointer'
             }}>
               Ya pagué, subir comprobante →
             </button>
@@ -206,36 +206,36 @@ export function Checkout() {
         {paso === 3 && (
           <>
             <h1 style={{ fontSize: '20px', fontWeight: '500', marginBottom: '8px' }}>📸 Enviar comprobante</h1>
-            <p style={{ fontSize: '13px', color: '#555', marginBottom: '24px' }}>Sube la captura de pantalla de tu pago por Yape</p>
+            <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '24px' }}>Sube la captura de pantalla de tu pago por Yape</p>
             <div
               onClick={() => document.getElementById('file-input').click()}
               style={{
-                border: `2px dashed ${comprobante ? '#F5C100' : '#2a2a2a'}`,
+                border: `2px dashed ${comprobante ? '#F5C100' : '#e5e7eb'}`,
                 borderRadius: '12px', padding: '40px', textAlign: 'center',
-                marginBottom: '20px', background: '#111', cursor: 'pointer'
+                marginBottom: '20px', background: '#ffffff', cursor: 'pointer'
               }}
             >
               {comprobante ? (
                 <>
                   <div style={{ fontSize: '40px', marginBottom: '8px' }}>✅</div>
                   <div style={{ fontWeight: '500', color: '#F5C100', marginBottom: '4px' }}>Imagen seleccionada</div>
-                  <div style={{ fontSize: '12px', color: '#555' }}>{comprobante.name}</div>
+                  <div style={{ fontSize: '12px', color: '#6b7280' }}>{comprobante.name}</div>
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: '40px', marginBottom: '8px', color: '#555' }}>📷</div>
-                  <div style={{ fontSize: '14px', color: '#555' }}>Toca para subir captura</div>
+                  <div style={{ fontSize: '40px', marginBottom: '8px', color: '#6b7280' }}>📷</div>
+                  <div style={{ fontSize: '14px', color: '#6b7280' }}>Toca para subir captura</div>
                 </>
               )}
               <input id="file-input" type="file" accept="image/*" style={{ display: 'none' }} onChange={e => setComprobante(e.target.files[0])} />
             </div>
-            <div style={{ fontSize: '12px', color: '#555', marginBottom: '20px', background: '#111', borderRadius: '8px', padding: '12px' }}>
+            <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '20px', background: '#ffffff', borderRadius: '8px', padding: '12px' }}>
               💬 También puedes enviarlo por WhatsApp al <strong style={{ color: '#F5C100' }}>{YAPE_NUMERO}</strong>
             </div>
             <button onClick={enviarComprobante} disabled={!comprobante || enviando} style={{
               width: '100%', padding: '13px', borderRadius: '8px', border: 'none',
-              background: !comprobante ? '#1a1a1a' : '#F5C100',
-              color: !comprobante ? '#444' : '#0a0a0a', fontSize: '14px', fontWeight: '600',
+              background: !comprobante ? '#ffffff' : '#F5C100',
+              color: !comprobante ? '#9ca3af' : '#f9fafb', fontSize: '14px', fontWeight: '600',
               cursor: !comprobante ? 'not-allowed' : 'pointer',
               border: !comprobante ? '0.5px solid #2a2a2a' : 'none'
             }}>
@@ -248,25 +248,25 @@ export function Checkout() {
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '72px', marginBottom: '16px' }}>🎉</div>
             <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '8px' }}>¡Pedido registrado!</h1>
-            <p style={{ color: '#555', fontSize: '14px', marginBottom: '24px' }}>
+            <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '24px' }}>
               Verificaremos tu pago y te contactaremos para coordinar el recojo.
             </p>
-            <div style={{ background: '#111', borderRadius: '8px', padding: '16px', marginBottom: '24px', textAlign: 'left' }}>
+            <div style={{ background: '#ffffff', borderRadius: '8px', padding: '16px', marginBottom: '24px', textAlign: 'left' }}>
               <div style={{ fontSize: '12px', color: '#F5C100', fontWeight: '500', marginBottom: '8px' }}>¿Qué sigue?</div>
               {['Verificamos tu pago (máx. 30 min en horario laboral)', 'Te contactamos al WhatsApp que registraste', 'Coordinas el recojo en tienda'].map((s, i) => (
-                <div key={i} style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>
+                <div key={i} style={{ fontSize: '13px', color: '#4b5563', marginBottom: '4px' }}>
                   <span style={{ color: '#F5C100', marginRight: '8px' }}>{i + 1}.</span>{s}
                 </div>
               ))}
             </div>
             <Link to="/mis-pedidos" style={{
               display: 'block', padding: '13px', borderRadius: '8px', background: '#F5C100',
-              color: '#0a0a0a', textDecoration: 'none', fontWeight: '600', fontSize: '14px', marginBottom: '10px'
+              color: '#1f2937', textDecoration: 'none', fontWeight: '600', fontSize: '14px', marginBottom: '10px'
             }}>Ver mis pedidos</Link>
             <button onClick={() => navigate('/')} style={{
               width: '100%', padding: '13px', borderRadius: '8px',
-              border: '0.5px solid #2a2a2a', background: 'transparent',
-              color: '#888', fontSize: '14px', cursor: 'pointer'
+              border: '1px solid #e5e7eb', background: 'transparent',
+              color: '#6b7280', fontSize: '14px', cursor: 'pointer'
             }}>Volver al inicio</button>
           </div>
         )}

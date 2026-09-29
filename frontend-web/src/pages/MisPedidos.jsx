@@ -53,19 +53,19 @@ export default function MisPedidos() {
   }
 
   return (
-    <div style={{ background: '#0a0a0a', minHeight: '100vh', color: '#f0f0f0', fontFamily: "'IBM Plex Sans', sans-serif" }}>
+    <div style={{ background: '#f9fafb', minHeight: '100vh', color: '#1f2937', fontFamily: "'IBM Plex Sans', sans-serif" }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '40px 24px' }}>
         <h1 style={{ fontSize: '22px', fontWeight: '500', marginBottom: '6px' }}>📦 Mis Pedidos</h1>
-        <p style={{ color: '#555', fontSize: '13px', marginBottom: '28px' }}>Hola {cliente?.nombre}, aquí están tus pedidos.</p>
+        <p style={{ color: '#6b7280', fontSize: '13px', marginBottom: '28px' }}>Hola {cliente?.nombre}, aquí están tus pedidos.</p>
 
         {cargando ? (
           <div style={{ textAlign: 'center', padding: '60px', fontSize: '32px' }}>⏳</div>
         ) : pedidos.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: '#555' }}>
+          <div style={{ textAlign: 'center', padding: '60px', color: '#6b7280' }}>
             <div style={{ fontSize: '48px', marginBottom: '12px' }}>📭</div>
             <p style={{ marginBottom: '20px' }}>Aún no tienes pedidos.</p>
             <Link to="/productos" style={{
-              padding: '12px 28px', background: '#F5C100', color: '#0a0a0a',
+              padding: '12px 28px', background: '#F5C100', color: '#1f2937',
               borderRadius: '8px', textDecoration: 'none', fontWeight: '600', fontSize: '14px'
             }}>Ver productos</Link>
           </div>
@@ -77,13 +77,13 @@ export default function MisPedidos() {
 
               return (
                 <div key={p.id} style={{
-                  background: '#1a1a1a', border: '0.5px solid #2a2a2a',
+                  background: '#ffffff', border: '0.5px solid #2a2a2a',
                   borderRadius: '12px', padding: '20px 24px'
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
                     <div>
-                      <div style={{ fontWeight: '600', fontSize: '16px', color: '#fff' }}>Pedido #{p.numero}</div>
-                      <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>
+                      <div style={{ fontWeight: '600', fontSize: '16px', color: '#1f2937' }}>Pedido #{p.numero}</div>
+                      <div style={{ fontSize: '12px', color: '#4b5563', marginTop: '2px' }}>
                         {new Date(p.creado_en).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -99,11 +99,11 @@ export default function MisPedidos() {
                   </div>
 
                   <div style={{ borderTop: '0.5px solid #282828', paddingTop: '12px', marginBottom: '12px' }}>
-                    <div style={{ fontSize: '11px', color: '#777', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Productos:</div>
+                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Productos:</div>
                     {p.venta_items?.map(item => (
-                      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#bbb', marginBottom: '5px' }}>
-                        <span>• {item.nombre_producto} <strong style={{ color: '#888' }}>x{item.cantidad}</strong></span>
-                        <span style={{ color: '#ddd' }}>S/ {parseFloat(item.subtotal).toFixed(2)}</span>
+                      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#4b5563', marginBottom: '5px' }}>
+                        <span>• {item.nombre_producto} <strong style={{ color: '#6b7280' }}>x{item.cantidad}</strong></span>
+                        <span style={{ color: '#374151' }}>S/ {parseFloat(item.subtotal).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
@@ -122,7 +122,7 @@ export default function MisPedidos() {
                         ) : (
                           <label style={{
                             padding: '6px 14px', borderRadius: '6px', fontSize: '12px', fontWeight: '600',
-                            background: '#F5C100', color: '#0a0a0a', cursor: subiendoId === p.id ? 'wait' : 'pointer'
+                            background: '#F5C100', color: '#1f2937', cursor: subiendoId === p.id ? 'wait' : 'pointer'
                           }}>
                             {subiendoId === p.id ? 'Subiendo...' : '📎 Adjuntar Comprobante'}
                             <input
