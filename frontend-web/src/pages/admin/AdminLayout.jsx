@@ -1,5 +1,6 @@
-﻿import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAdminAuth } from '../../context/AdminAuthContext'
+import { LayoutDashboard, ShoppingBag, Package, FileSpreadsheet, ExternalLink, Wrench } from 'lucide-react'
 
 export default function AdminLayout() {
   const { admin, logout } = useAdminAuth()
@@ -14,21 +15,21 @@ export default function AdminLayout() {
     padding: '9px 14px',
     borderRadius: '6px',
     fontSize: '13px',
-    fontWeight: '500',
+    fontWeight: '600',
     textDecoration: 'none',
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
     background: isActive ? '#F5C100' : 'transparent',
-    color: isActive ? '#0a0a0a' : '#aaa',
+    color: isActive ? '#1f2937' : '#4b5563',
     transition: 'all 0.2s ease',
   })
 
   return (
-    <div style={{ background: '#0a0a0a', minHeight: '100vh', color: '#f0f0f0', fontFamily: "'IBM Plex Sans', sans-serif", display: 'flex', flexDirection: 'column' }}>
+    <div style={{ background: '#f9fafb', minHeight: '100vh', color: '#1f2937', fontFamily: "'IBM Plex Sans', sans-serif", display: 'flex', flexDirection: 'column' }}>
       {/* Top Admin Navbar */}
       <header style={{
-        background: '#111',
+        background: '#ffffff',
         borderBottom: '2px solid #F5C100',
         padding: '0 24px',
         height: '60px',
@@ -41,33 +42,35 @@ export default function AdminLayout() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <Link to="/admin" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '32px', height: '32px', background: '#F5C100', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px' }}>⚡</div>
+            <div style={{ width: '32px', height: '32px', background: '#F5C100', color: '#1f2937', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px' }}>
+              <Wrench size={18} strokeWidth={2.5} />
+            </div>
             <div>
-              <div style={{ color: '#fff', fontWeight: '700', fontSize: '14px', lineHeight: 1 }}>Ferretería Nazca</div>
-              <div style={{ color: '#F5C100', fontSize: '9px', letterSpacing: '1px', marginTop: '2px', textTransform: 'uppercase' }}>Panel Administración</div>
+              <div style={{ color: '#1f2937', fontWeight: '800', fontSize: '14px', lineHeight: 1 }}>Ferretería Nazca</div>
+              <div style={{ color: '#F5C100', fontSize: '9px', letterSpacing: '1px', marginTop: '2px', textTransform: 'uppercase', fontWeight: 'bold' }}>Panel Administración</div>
             </div>
           </Link>
 
-          <nav style={{ display: 'flex', gap: '6px', marginLeft: '12px' }}>
-            <NavLink to="/admin" end style={navItemStyle}>📊 Dashboard</NavLink>
-            <NavLink to="/admin/ventas" style={navItemStyle}>🛍️ Pedidos & Ventas</NavLink>
-            <NavLink to="/admin/inventario" style={navItemStyle}>📦 Inventario</NavLink>
-            <NavLink to="/admin/reportes" style={navItemStyle}>📑 Reportes Excel</NavLink>
+          <nav style={{ display: 'flex', gap: '6px', marginLeft: '24px' }}>
+            <NavLink to="/admin" end style={navItemStyle}><LayoutDashboard size={16} /> Dashboard</NavLink>
+            <NavLink to="/admin/ventas" style={navItemStyle}><ShoppingBag size={16} /> Pedidos & Ventas</NavLink>
+            <NavLink to="/admin/inventario" style={navItemStyle}><Package size={16} /> Inventario</NavLink>
+            <NavLink to="/admin/reportes" style={navItemStyle}><FileSpreadsheet size={16} /> Reportes Excel</NavLink>
           </nav>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <Link to="/" target="_blank" style={{ fontSize: '12px', color: '#888', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            🌐 Ver Tienda ↗
+          <Link to="/" target="_blank" style={{ fontSize: '12px', color: '#6b7280', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '500' }}>
+            <ExternalLink size={14} /> Ver Tienda
           </Link>
-          <div style={{ borderLeft: '1px solid #2a2a2a', height: '24px' }}></div>
+          <div style={{ borderLeft: '1px solid #e5e7eb', height: '24px' }}></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '13px', fontWeight: '600', color: '#fff' }}>{admin?.nombre}</div>
-              <div style={{ fontSize: '10px', color: '#F5C100', textTransform: 'uppercase' }}>{admin?.rol}</div>
+              <div style={{ fontSize: '13px', fontWeight: '700', color: '#1f2937' }}>{admin?.nombre}</div>
+              <div style={{ fontSize: '10px', color: '#F5C100', textTransform: 'uppercase', fontWeight: 'bold' }}>{admin?.rol}</div>
             </div>
             <button onClick={handleLogout} style={{
-              background: '#1a1a1a', border: '0.5px solid #333', color: '#ff6b6b', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', cursor: 'pointer'
+              background: '#ffffff', border: '1px solid #e5e7eb', color: '#ef4444', borderRadius: '6px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer'
             }}>
               Salir
             </button>

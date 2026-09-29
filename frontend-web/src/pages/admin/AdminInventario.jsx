@@ -1,3 +1,4 @@
+import { Package, Search, Plus, Filter, Download, X, Eye, Check, Truck, AlertCircle, Clock, CheckCircle2, ChevronRight, Edit, Trash2 } from 'lucide-react'
 ﻿import { useState, useEffect } from 'react'
 import api from '../../services/api'
 
@@ -50,8 +51,8 @@ export default function AdminInventario() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#fff', margin: '0 0 6px 0' }}>Control de Inventario & Stock</h1>
-          <p style={{ fontSize: '13px', color: '#777', margin: 0 }}>Monitoreo de existencias y registro de entradas/salidas</p>
+          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>Control de Inventario & Stock</h1>
+          <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>Monitoreo de existencias y registro de entradas/salidas</p>
         </div>
 
         <input
@@ -60,8 +61,8 @@ export default function AdminInventario() {
           value={buscar}
           onChange={e => setBuscar(e.target.value)}
           style={{
-            padding: '9px 14px', background: '#141414', border: '1px solid #333', borderRadius: '8px',
-            color: '#fff', fontSize: '13px', outline: 'none', width: '280px'
+            padding: '9px 14px', background: '#ffffff', border: '1px solid #333', borderRadius: '8px',
+            color: '#1f2937', fontSize: '13px', outline: 'none', width: '280px'
           }}
         />
       </div>
@@ -69,14 +70,14 @@ export default function AdminInventario() {
       {cargando ? (
         <div style={{ textAlign: 'center', padding: '60px', fontSize: '28px' }}>⏳ Cargando inventario...</div>
       ) : productos.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px', background: '#141414', borderRadius: '10px', color: '#666' }}>
+        <div style={{ textAlign: 'center', padding: '60px', background: '#ffffff', borderRadius: '10px', color: '#4b5563' }}>
           No se encontraron productos.
         </div>
       ) : (
-        <div style={{ background: '#141414', border: '1px solid #242424', borderRadius: '10px', overflowX: 'auto' }}>
+        <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', borderRadius: '10px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid #282828', background: '#181818', color: '#888' }}>
+              <tr style={{ borderBottom: '1px solid #282828', background: '#181818', color: '#6b7280' }}>
                 <th style={{ padding: '12px 16px' }}>Código</th>
                 <th style={{ padding: '12px 16px' }}>Producto</th>
                 <th style={{ padding: '12px 16px' }}>Categoría</th>
@@ -96,14 +97,14 @@ export default function AdminInventario() {
                 return (
                   <tr key={p.id} style={{ borderBottom: '1px solid #1f1f1f' }}>
                     <td style={{ padding: '12px 16px', fontWeight: '600', color: '#F5C100' }}>{p.codigo}</td>
-                    <td style={{ padding: '12px 16px', color: '#fff', fontWeight: '500' }}>{p.nombre}</td>
+                    <td style={{ padding: '12px 16px', color: '#1f2937', fontWeight: '500' }}>{p.nombre}</td>
                     <td style={{ padding: '12px 16px', color: '#aaa' }}>{p.categorias?.nombre || '—'}</td>
-                    <td style={{ padding: '12px 16px', color: '#888' }}>{p.unidad || 'unidad'}</td>
-                    <td style={{ padding: '12px 16px', color: '#ddd' }}>S/ {parseFloat(p.precio_venta).toFixed(2)}</td>
+                    <td style={{ padding: '12px 16px', color: '#6b7280' }}>{p.unidad || 'unidad'}</td>
+                    <td style={{ padding: '12px 16px', color: '#374151' }}>S/ {parseFloat(p.precio_venta).toFixed(2)}</td>
                     <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: '700', fontSize: '14px', color: sinStock ? '#ef4444' : stockBajo ? '#f59e0b' : '#22c55e' }}>
                       {p.stock_actual}
                     </td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center', color: '#777' }}>{p.stock_minimo || 5}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: '#6b7280' }}>{p.stock_minimo || 5}</td>
                     <td style={{ padding: '12px 16px', textAlign: 'center' }}>
                       <span style={{
                         padding: '3px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '700',
@@ -142,16 +143,16 @@ export default function AdminInventario() {
             background: '#161616', border: '1px solid #2e2e2e', borderRadius: '12px', padding: '24px',
             maxWidth: '440px', width: '100%', boxShadow: '0 8px 30px rgba(0,0,0,0.7)'
           }} onClick={e => e.stopPropagation()}>
-            <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#fff', margin: '0 0 6px 0' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>
               Ajustar Inventario: {modalProd.nombre}
             </h2>
-            <p style={{ fontSize: '12px', color: '#888', margin: '0 0 18px 0' }}>
+            <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 18px 0' }}>
               Stock actual: <strong style={{ color: '#F5C100' }}>{modalProd.stock_actual} {modalProd.unidad}</strong>
             </p>
 
             <form onSubmit={handleRegistrarMovimiento} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: '#bbb', marginBottom: '6px' }}>Tipo de Movimiento</label>
+                <label style={{ display: 'block', fontSize: '12px', color: '#4b5563', marginBottom: '6px' }}>Tipo de Movimiento</label>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button
                     type="button"
@@ -181,7 +182,7 @@ export default function AdminInventario() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: '#bbb', marginBottom: '6px' }}>Cantidad</label>
+                <label style={{ display: 'block', fontSize: '12px', color: '#4b5563', marginBottom: '6px' }}>Cantidad</label>
                 <input
                   type="number"
                   min="1"
@@ -189,22 +190,22 @@ export default function AdminInventario() {
                   onChange={e => setCantidad(e.target.value)}
                   required
                   style={{
-                    width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#1c1c1c',
-                    border: '1px solid #333', borderRadius: '6px', color: '#fff', fontSize: '14px'
+                    width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb',
+                    border: '1px solid #333', borderRadius: '6px', color: '#1f2937', fontSize: '14px'
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: '#bbb', marginBottom: '6px' }}>Motivo / Referencia</label>
+                <label style={{ display: 'block', fontSize: '12px', color: '#4b5563', marginBottom: '6px' }}>Motivo / Referencia</label>
                 <input
                   type="text"
                   placeholder="Ej: Factura de proveedor #402, corrección de inventario..."
                   value={referencia}
                   onChange={e => setReferencia(e.target.value)}
                   style={{
-                    width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#1c1c1c',
-                    border: '1px solid #333', borderRadius: '6px', color: '#fff', fontSize: '13px'
+                    width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb',
+                    border: '1px solid #333', borderRadius: '6px', color: '#1f2937', fontSize: '13px'
                   }}
                 />
               </div>
@@ -213,7 +214,7 @@ export default function AdminInventario() {
                 <button
                   type="button"
                   onClick={() => setModalProd(null)}
-                  style={{ padding: '8px 14px', borderRadius: '6px', background: 'transparent', border: '1px solid #333', color: '#888', cursor: 'pointer' }}
+                  style={{ padding: '8px 14px', borderRadius: '6px', background: 'transparent', border: '1px solid #333', color: '#6b7280', cursor: 'pointer' }}
                 >
                   Cancelar
                 </button>
@@ -221,7 +222,7 @@ export default function AdminInventario() {
                   type="submit"
                   disabled={enviando}
                   style={{
-                    padding: '8px 18px', borderRadius: '6px', background: '#F5C100', color: '#0a0a0a',
+                    padding: '8px 18px', borderRadius: '6px', background: '#F5C100', color: '#1f2937',
                     border: 'none', fontWeight: '700', fontSize: '13px', cursor: enviando ? 'wait' : 'pointer'
                   }}
                 >

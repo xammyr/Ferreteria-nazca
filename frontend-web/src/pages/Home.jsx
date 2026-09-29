@@ -1,3 +1,4 @@
+import { CreditCard, MessageSquare, Store, PackageCheck, Zap, Droplet, Lightbulb, PaintBucket, Settings, Trees, ShieldAlert, Package, Wrench, Hammer, HardHat, MapPin } from 'lucide-react';
 import { useEffect, useState, useCallback } from 'react'
 import '../index.css'
 import { Link, useNavigate } from 'react-router-dom'
@@ -9,6 +10,23 @@ const HERO_BG = 'https://res.cloudinary.com/detjy6mbw/image/upload/v1780817404/p
 const LOCAL_IMG = 'https://res.cloudinary.com/detjy6mbw/image/upload/v1780816884/000eba55204a0b757a380fe92df73a10_qduaco.webp'
 
 const SidebarMenu = ({ categorias, catActiva, setCatActiva }) => null
+
+
+const renderIcon = (nameOrEmoji) => {
+  switch (nameOrEmoji) {
+    case 'Cemento y Concreto': return <HardHat size={28} strokeWidth={1.5} />;
+    case 'Herramientas Manuales': return <Hammer size={28} strokeWidth={1.5} />;
+    case 'Herramientas Eléctricas': return <Zap size={28} strokeWidth={1.5} />;
+    case 'Plomería': return <Droplet size={28} strokeWidth={1.5} />;
+    case 'Electricidad': return <Lightbulb size={28} strokeWidth={1.5} />;
+    case 'Pintura': return <PaintBucket size={28} strokeWidth={1.5} />;
+    case 'Fierro y Acero': return <Settings size={28} strokeWidth={1.5} />;
+    case 'Madera y Triplay': return <Trees size={28} strokeWidth={1.5} />;
+    case 'Seguridad': return <ShieldAlert size={28} strokeWidth={1.5} />;
+    case 'Otros': return <Package size={28} strokeWidth={1.5} />;
+    default: return <Wrench size={28} strokeWidth={1.5} />;
+  }
+};
 
 export default function Home() {
   const [categorias, setCategorias] = useState([])
@@ -56,7 +74,7 @@ export default function Home() {
   const cardW = isMobile ? '160px' : '210px'
 
   return (
-    <div style={{ background: '#0a0a0a', minHeight: '100vh', color: '#f0f0f0', fontFamily: "'IBM Plex Sans', sans-serif" }}>
+    <div style={{ background: '#f9fafb', minHeight: '100vh', color: '#1f2937', fontFamily: "'IBM Plex Sans', sans-serif" }}>
 
       {/* HERO */}
       <div className="anim-hero" style={{
@@ -74,7 +92,7 @@ export default function Home() {
             background: 'rgba(245,193,0,0.1)', border: '0.5px solid rgba(245,193,0,0.3)',
             color: '#F5C100', borderRadius: '20px', padding: '4px 14px',
             fontSize: '11px', letterSpacing: '1px', marginBottom: '20px'
-          }} className='anim-badge'>⚡ FERRETERÍA #1 EN NASCA</div>
+          }} className='anim-badge'><Zap size={14} style={{ marginRight: "6px" }} /> FERRETERÍA #1 EN NASCA</div>
           <h1 style={{ fontSize: isMobile ? '30px' : '42px', fontWeight: '600', lineHeight: 1.15, marginBottom: '16px' }}>
             Todo para tu<br /><span style={{ color: '#F5C100' }}>obra y hogar</span>
           </h1>
@@ -82,29 +100,29 @@ export default function Home() {
             Cemento, fierro, herramientas y más.<br />Paga con Yape, recoge en tienda.
           </p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <button onClick={() => navigate('/productos')} style={{ padding: '13px 28px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', background: '#F5C100', color: '#0a0a0a', border: 'none', cursor: 'pointer' }}>Ver catálogo →</button>
-            <a href="https://wa.me/51999888777" target="_blank" rel="noreferrer" style={{ padding: '13px 28px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', background: 'transparent', color: '#f0f0f0', border: '0.5px solid #555', cursor: 'pointer', textDecoration: 'none' }}>💬 WhatsApp</a>
+            <button onClick={() => navigate('/productos')} style={{ padding: '13px 28px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', background: '#F5C100', color: '#1f2937', border: 'none', cursor: 'pointer' }}>Ver catálogo →</button>
+            <a href="https://wa.me/51999888777" target="_blank" rel="noreferrer" style={{ padding: '13px 28px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', background: 'transparent', color: '#1f2937', border: '0.5px solid #555', cursor: 'pointer', textDecoration: 'none' }}><MessageSquare size={16} style={{ marginRight: "8px" }} /> WhatsApp</a>
           </div>
           <div style={{ display: 'flex', gap: '32px', marginTop: '28px' }}>
             {[['70+', 'Productos'], ['24/7', 'Chatbot IA'], ['Yape', 'Pago rápido']].map(([n, l]) => (
               <div key={l}>
                 <div style={{ fontSize: '20px', fontWeight: '600', color: '#F5C100' }}>{n}</div>
-                <div style={{ fontSize: '11px', color: '#888', marginTop: '2px' }}>{l}</div>
+                <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px' }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
         <div className='hero-img-anim' style={{ position: 'relative', zIndex: 1, flexShrink: 0, width: isMobile ? '100%' : '300px', height: isMobile ? '200px' : '210px', borderRadius: '14px', overflow: 'hidden', border: '2px solid #F5C100' }}>
           <img src={LOCAL_IMG} alt="Ferretería Nasca" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(0,0,0,0.7)', borderRadius: '6px', padding: '5px 12px', fontSize: '11px', color: '#F5C100', fontWeight: '500' }}>📍 Jr. Lima 123, Nasca, Ica</div>
+          <div style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(0,0,0,0.7)', borderRadius: '6px', padding: '5px 12px', fontSize: '11px', color: '#F5C100', fontWeight: '500' }}><MapPin size={12} style={{ marginRight: "4px" }} /> Jr. Lima 123, Nasca, Ica</div>
         </div>
       </div>
 
       {/* BENEFICIOS */}
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', background: '#111', borderBottom: '1px solid #1a1a1a' }}>
-        {[['📱','Pago con Yape'],['💬','Chatbot 24/7'],['🏪','Recojo en tienda'],['📦','Stock garantizado']].map(([icon, label], i) => (
-          <div key={label} style={{ padding: '14px', textAlign: 'center', borderRight: (!isMobile && i < 3) ? '1px solid #1a1a1a' : 'none', borderBottom: (isMobile && i < 2) ? '1px solid #1a1a1a' : 'none', fontSize: '12px', color: '#666' }}>
-            <span style={{ marginRight: '6px' }}>{icon}</span>{label}
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', background: '#ffffff', borderBottom: '1px solid #e5e7eb' }}>
+        {[[<CreditCard size={18}/>,'Pago con Yape'],[<MessageSquare size={18}/>,'Chatbot 24/7'],[<Store size={18}/>,'Recojo en tienda'],[<PackageCheck size={18}/>,'Stock garantizado']].map(([icon, label], i) => (
+          <div key={label} style={{ padding: '14px', textAlign: 'center', borderRight: (!isMobile && i < 3) ? '1px solid #e5e7eb' : 'none', borderBottom: (isMobile && i < 2) ? '1px solid #e5e7eb' : 'none', fontSize: '12px', color: '#4b5563' }}>
+            <span style={{ marginRight: "6px", display: "inline-flex", alignItems: "center" }}>{icon}</span>{label}
           </div>
         ))}
       </div>
@@ -119,9 +137,9 @@ export default function Home() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : 'repeat(auto-fill, minmax(110px, 1fr))', gap: '8px' }}>
           {categorias.map((cat, idx) => (
-            <div key={cat.id} onClick={() => filtrarPorCategoria(cat.id)} className={`anim-cat-card delay-${Math.min(idx+1,12)}`} style={{ background: catActiva === cat.id ? 'rgba(245,193,0,0.08)' : '#1a1a1a', border: `0.5px solid ${catActiva === cat.id ? 'rgba(245,193,0,0.5)' : '#2a2a2a'}`, borderRadius: '10px', padding: '14px 8px', textAlign: 'center', cursor: 'pointer' }}>
-              <div style={{ fontSize: '22px', marginBottom: '6px' }}>{cat.icono || '📦'}</div>
-              <div style={{ fontSize: '10px', color: catActiva === cat.id ? '#F5C100' : '#888', lineHeight: 1.3 }}>{cat.nombre}</div>
+            <div key={cat.id} onClick={() => filtrarPorCategoria(cat.id)} className={`anim-cat-card delay-${Math.min(idx+1,12)}`} style={{ background: catActiva === cat.id ? 'rgba(245,193,0,0.08)' : '#ffffff', border: `0.5px solid ${catActiva === cat.id ? 'rgba(245,193,0,0.5)' : '#e5e7eb'}`, borderRadius: '10px', padding: '14px 8px', textAlign: 'center', cursor: 'pointer' }}>
+              <div style={{ color: catActiva === cat.id ? '#F5C100' : '#4b5563', marginBottom: '8px', display: 'flex', justifyContent: 'center' }}>{renderIcon(cat.nombre)}</div>
+              <div style={{ fontSize: '10px', color: catActiva === cat.id ? '#F5C100' : '#6b7280', lineHeight: 1.3 }}>{cat.nombre}</div>
             </div>
           ))}
         </div>
@@ -133,8 +151,8 @@ export default function Home() {
           <h2 style={{ fontSize: '18px', fontWeight: '500' }}>Productos destacados</h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <Link to="/productos" style={{ fontSize: '12px', color: '#F5C100', textDecoration: 'none' }}>Ver todos →</Link>
-            <button onClick={scrollPrev} className='carousel-btn' style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#1a1a1a', border: '0.5px solid #2a2a2a', color: '#f0f0f0', fontSize: '16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
-            <button onClick={scrollNext} className='carousel-btn' style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#F5C100', border: 'none', color: '#0a0a0a', fontSize: '16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>›</button>
+            <button onClick={scrollPrev} className='carousel-btn' style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#ffffff', border: '1px solid #e5e7eb', color: '#1f2937', fontSize: '16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+            <button onClick={scrollNext} className='carousel-btn' style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#F5C100', border: 'none', color: '#1f2937', fontSize: '16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>›</button>
           </div>
         </div>
 
@@ -142,25 +160,25 @@ export default function Home() {
         <div ref={emblaRef} style={{ overflow: 'hidden' }}>
           <div style={{ display: 'flex', gap: '12px' }}>
             {productos.map((p, pidx) => (
-              <div key={p.id} className={`anim-card delay-${Math.min(pidx+1,12)}`} style={{ flex: `0 0 ${cardW}`, minWidth: 0, background: '#1a1a1a', border: '0.5px solid #2a2a2a', borderRadius: '10px', overflow: 'hidden' }}
+              <div key={p.id} className={`anim-card delay-${Math.min(pidx+1,12)}`} style={{ flex: `0 0 ${cardW}`, minWidth: 0, background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '10px', overflow: 'hidden' }}
 
               >
-                <div style={{ background: '#111', height: isMobile ? '110px' : '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', borderBottom: '0.5px solid #2a2a2a', overflow: 'hidden' }}>
+                <div style={{ background: '#ffffff', height: isMobile ? '110px' : '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', borderBottom: '1px solid #e5e7eb', overflow: 'hidden' }}>
                   {p.imagen_url
                     ? <img src={p.imagen_url} alt={p.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    : <span>{p.categorias?.icono || '📦'}</span>
+                    : <span style={{ color: '#6b7280' }}>{renderIcon(p.categorias?.nombre)}</span>
                   }
                 </div>
                 <div style={{ padding: '12px' }}>
                   <div style={{ fontSize: '12px', fontWeight: '500', lineHeight: 1.3, marginBottom: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.nombre}</div>
-                  <div style={{ fontSize: '10px', color: '#555', marginBottom: '8px' }}>{p.unidad}</div>
+                  <div style={{ fontSize: '10px', color: '#6b7280', marginBottom: '8px' }}>{p.unidad}</div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                     <span style={{ fontSize: '15px', fontWeight: '600', color: '#F5C100' }}>S/ {parseFloat(p.precio_venta).toFixed(2)}</span>
                     <span style={{ fontSize: '9px', padding: '2px 6px', borderRadius: '10px', background: p.stock_actual > 5 ? 'rgba(59,109,17,0.15)' : 'rgba(226,75,74,0.12)', color: p.stock_actual > 5 ? '#5a9e30' : '#E24B4A' }}>
                       {p.stock_actual > 0 ? `${p.stock_actual} disp.` : 'Sin stock'}
                     </span>
                   </div>
-                  <button onClick={() => agregar(p)} disabled={p.stock_actual === 0} style={{ width: '100%', padding: '8px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', background: p.stock_actual === 0 ? 'transparent' : '#F5C100', color: p.stock_actual === 0 ? '#444' : '#0a0a0a', border: p.stock_actual === 0 ? '0.5px solid #2a2a2a' : 'none', cursor: p.stock_actual === 0 ? 'not-allowed' : 'pointer' }}>
+                  <button onClick={() => agregar(p)} disabled={p.stock_actual === 0} style={{ width: '100%', padding: '8px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', background: p.stock_actual === 0 ? 'transparent' : '#F5C100', color: p.stock_actual === 0 ? '#9ca3af' : '#1f2937', border: p.stock_actual === 0 ? '0.5px solid #2a2a2a' : 'none', cursor: p.stock_actual === 0 ? 'not-allowed' : 'pointer' }}>
                     {p.stock_actual === 0 ? 'Sin stock' : '+ Agregar'}
                   </button>
                 </div>
@@ -175,9 +193,9 @@ export default function Home() {
         <div className='banner-yape' style={{ background: 'rgba(245,193,0,0.06)', border: '0.5px solid rgba(245,193,0,0.2)', borderRadius: '12px', padding: isMobile ? '20px' : '24px 28px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: '16px' }}>
           <div>
             <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>Paga con <span style={{ color: '#F5C100' }}>Yape</span> — rápido y seguro</div>
-            <div style={{ fontSize: '12px', color: '#666' }}>Transfiere al 999888777 y envíanos la captura.</div>
+            <div style={{ fontSize: '12px', color: '#4b5563' }}>Transfiere al 999888777 y envíanos la captura.</div>
           </div>
-          <button onClick={() => navigate('/productos')} style={{ padding: '11px 24px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', background: '#F5C100', color: '#0a0a0a', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', width: isMobile ? '100%' : 'auto' }}>
+          <button onClick={() => navigate('/productos')} style={{ padding: '11px 24px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', background: '#F5C100', color: '#1f2937', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', width: isMobile ? '100%' : 'auto' }}>
             Comprar ahora
           </button>
         </div>

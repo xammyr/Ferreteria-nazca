@@ -1,3 +1,5 @@
+* { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'IBM Plex Sans', sans-serif; background-color: #f9fafb; color: #111827; overflow-x: hidden; }
+
 /* ── ANIMACIONES GLOBALES – Ferretería Nasca ─────────────────────────── */
 
 /* Fade in desde abajo — para cards y secciones */
@@ -140,6 +142,6 @@ html {
 
 /* ── SCROLLBAR PERSONALIZADA ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+::-webkit-scrollbar-track { background: #f3f4f6; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #F5C100; }
