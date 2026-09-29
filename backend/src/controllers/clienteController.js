@@ -87,13 +87,52 @@ async function misPedidos(req, res) {
   try {
     const ventas = await prisma.ventas.findMany({
       where: { cliente_id: req.cliente.id },
-      include: { venta_items: true },
+      include: {
+        venta_items: {
+          include: { productos: true }
+        }
+      },
       orderBy: { creado_en: 'desc' }
     })
     res.json(ventas)
   } catch (err) {
-    res.status(500).json({ error: 'Error interno' })
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
   }
 }
 
-module.exports = { register, login, me, misPedidos }
+// PATCH /api/clientes/pedidos/:id/comprobante
+async function adjuntarComprobante(req, res) {
+  const { comprobante_url } = req.body
+  if (!comprobante_url) {
+    return res.status(400).json({ error: 'comprobante_url es requerido' })
+  }
+
+  try {
+    const venta = await prisma.ventas.findUnique({
+      where: { id: req.params.id }
+    })
+
+    if (!venta) {
+      return res.status(404).json({ error: 'Pedido no encontrado' })
+    }
+
+    if (venta.cliente_id !== req.cliente.id) {
+      return res.status(403).json({ error: 'No tienes permiso para actualizar este pedido' })
+    }
+
+    if (venta.estado !== 'pendiente') {
+      return res.status(400).json({ error: 'Solo se puede adjuntar comprobante a pedidos pendientes' })
+    }
+
+    const ventaActualizada = await prisma.ventas.update({
+      where: { id: req.params.id },
+      data: { comprobante_url }
+    })
+
+    res.json(ventaActualizada)
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno', detalle: err.message })
+  }
+}
+
+module.exports = { register, login, me, misPedidos, adjuntarComprobante }

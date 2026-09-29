@@ -13,15 +13,44 @@ const estados = {
 export default function MisPedidos() {
   const [pedidos, setPedidos] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [subiendoId, setSubiendoId] = useState(null)
   const { cliente } = useClienteAuth()
 
-  useEffect(() => {
-    const token = localStorage.getItem('cliente_token')
-    api.get('/clientes/pedidos', { headers: { Authorization: `Bearer ${token}` } })
+  function cargarPedidos() {
+    api.get('/clientes/pedidos')
       .then(r => setPedidos(r.data))
       .catch(console.error)
       .finally(() => setCargando(false))
+  }
+
+  useEffect(() => {
+    cargarPedidos()
   }, [])
+
+  async function handleSubirComprobante(pedidoId, file) {
+    if (!file) return
+    setSubiendoId(pedidoId)
+    try {
+      // 1. Subir imagen
+      const formData = new FormData()
+      formData.append('comprobante', file)
+      const { data: imgData } = await api.post('/upload/comprobante', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
+      // 2. Adjuntar a pedido
+      await api.patch(`/clientes/pedidos/${pedidoId}/comprobante`, {
+        comprobante_url: imgData.url
+      })
+
+      alert('¡Comprobante adjuntado correctamente! Nuestro personal lo verificará a la brevedad.')
+      cargarPedidos()
+    } catch (err) {
+      alert('Error al subir comprobante: ' + (err.response?.data?.error || err.message))
+    } finally {
+      setSubiendoId(null)
+    }
+  }
 
   return (
     <div style={{ background: '#0a0a0a', minHeight: '100vh', color: '#f0f0f0', fontFamily: "'IBM Plex Sans', sans-serif" }}>
@@ -41,19 +70,21 @@ export default function MisPedidos() {
             }}>Ver productos</Link>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {pedidos.map(p => {
               const est = estados[p.estado] || estados.pendiente
+              const tieneComprobante = !!p.comprobante_url
+
               return (
                 <div key={p.id} style={{
                   background: '#1a1a1a', border: '0.5px solid #2a2a2a',
                   borderRadius: '12px', padding: '20px 24px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
                     <div>
-                      <div style={{ fontWeight: '500', fontSize: '15px' }}>Pedido #{p.numero}</div>
-                      <div style={{ fontSize: '12px', color: '#555', marginTop: '2px' }}>
-                        {new Date(p.creado_en).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      <div style={{ fontWeight: '600', fontSize: '16px', color: '#fff' }}>Pedido #{p.numero}</div>
+                      <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>
+                        {new Date(p.creado_en).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -66,17 +97,56 @@ export default function MisPedidos() {
                       </span>
                     </div>
                   </div>
-                  <div style={{ borderTop: '0.5px solid #222', paddingTop: '12px' }}>
+
+                  <div style={{ borderTop: '0.5px solid #282828', paddingTop: '12px', marginBottom: '12px' }}>
+                    <div style={{ fontSize: '11px', color: '#777', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>Productos:</div>
                     {p.venta_items?.map(item => (
-                      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666', marginBottom: '3px' }}>
-                        <span>{item.nombre_producto} x{item.cantidad}</span>
-                        <span>S/ {parseFloat(item.subtotal).toFixed(2)}</span>
+                      <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#bbb', marginBottom: '5px' }}>
+                        <span>• {item.nombre_producto} <strong style={{ color: '#888' }}>x{item.cantidad}</strong></span>
+                        <span style={{ color: '#ddd' }}>S/ {parseFloat(item.subtotal).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
+
+                  {/* Estado del Comprobante y opciones de subida */}
                   {p.estado === 'pendiente' && (
-                    <div style={{ marginTop: '12px', background: 'rgba(239,159,39,0.08)', border: '0.5px solid rgba(239,159,39,0.2)', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#EF9F27' }}>
-                      ⏳ Esperando verificación de pago. Si ya pagaste, escríbenos por WhatsApp.
+                    <div style={{ marginTop: '12px', background: 'rgba(239,159,39,0.06)', border: '0.5px solid rgba(239,159,39,0.2)', borderRadius: '8px', padding: '12px 14px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                        <div style={{ fontSize: '12.5px', color: '#EF9F27' }}>
+                          {tieneComprobante ? '⏳ Comprobante adjuntado. Nuestro equipo lo está verificando.' : '⚠️ Aún no has adjuntado tu comprobante de Yape.'}
+                        </div>
+                        {tieneComprobante ? (
+                          <a href={p.comprobante_url} target="_blank" rel="noreferrer" style={{ fontSize: '12px', color: '#F5C100', textDecoration: 'underline' }}>
+                            Ver comprobante enviado ↗
+                          </a>
+                        ) : (
+                          <label style={{
+                            padding: '6px 14px', borderRadius: '6px', fontSize: '12px', fontWeight: '600',
+                            background: '#F5C100', color: '#0a0a0a', cursor: subiendoId === p.id ? 'wait' : 'pointer'
+                          }}>
+                            {subiendoId === p.id ? 'Subiendo...' : '📎 Adjuntar Comprobante'}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              disabled={subiendoId === p.id}
+                              onChange={e => handleSubirComprobante(p.id, e.target.files[0])}
+                              style={{ display: 'none' }}
+                            />
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {p.estado === 'pagado' && (
+                    <div style={{ marginTop: '10px', fontSize: '12px', color: '#5a9e30', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>✅ Pago confirmado por Ferretería Nazca. Tu pedido está siendo preparado.</span>
+                    </div>
+                  )}
+
+                  {p.estado === 'despachado' && (
+                    <div style={{ marginTop: '10px', fontSize: '12px', color: '#378ADD', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>🚚 Tu pedido ya fue despachado o está listo para recojo en tienda.</span>
                     </div>
                   )}
                 </div>

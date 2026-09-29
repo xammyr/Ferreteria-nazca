@@ -119,6 +119,10 @@ async function cambiarEstado(req, res) {
   if (!estadosValidos.includes(estado))
     return res.status(400).json({ error: 'Estado inválido' })
 
+  if (req.usuario && !['admin', 'vendedor'].includes(req.usuario.rol)) {
+    return res.status(403).json({ error: 'Solo administradores o vendedores pueden cambiar el estado de ventas' })
+  }
+
   try {
     const venta = await prisma.ventas.update({
       where: { id: req.params.id },

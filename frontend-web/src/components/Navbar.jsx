@@ -67,6 +67,9 @@ export default function Navbar() {
                 Iniciar sesión
               </Link>
             )}
+            <Link to="/admin" title="Panel de Administración" style={{ color: '#666', textDecoration: 'none', fontSize: '13px', padding: '6px 8px', borderRadius: '6px' }}>
+              ⚙️
+            </Link>
             <Link to="/carrito" style={{ position: 'relative', textDecoration: 'none', marginLeft: '4px' }}>
               <div style={{ background: '#1a1a1a', border: '0.5px solid #2a2a2a', borderRadius: '8px', padding: '7px 12px', fontSize: '16px' }}>🛒</div>
               {totalItems > 0 && (
@@ -110,6 +113,9 @@ export default function Navbar() {
 
           <Link to="/productos" onClick={() => setMenuAbierto(false)} style={{ color: '#f0f0f0', textDecoration: 'none', fontSize: '15px', padding: '10px 0', borderBottom: '0.5px solid #1a1a1a' }}>
             📦 Productos
+          </Link>
+          <Link to="/admin" onClick={() => setMenuAbierto(false)} style={{ color: '#F5C100', textDecoration: 'none', fontSize: '15px', padding: '10px 0', borderBottom: '0.5px solid #1a1a1a' }}>
+            ⚙️ Panel de Administración
           </Link>
           {cliente ? (
             <>

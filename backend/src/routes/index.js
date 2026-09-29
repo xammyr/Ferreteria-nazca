@@ -22,6 +22,7 @@ router.post('/clientes/register', clienteCtrl.register)
 router.post('/clientes/login', clienteCtrl.login)
 router.get('/clientes/me', clienteAuthMiddleware, clienteCtrl.me)
 router.get('/clientes/pedidos', clienteAuthMiddleware, clienteCtrl.misPedidos)
+router.patch('/clientes/pedidos/:id/comprobante', clienteAuthMiddleware, clienteCtrl.adjuntarComprobante)
 
 // ── PRODUCTOS (públicos para web/chatbot) ─────────────────────
 router.get('/productos', productosCtrl.listar)
@@ -36,7 +37,7 @@ router.get('/ventas/resumen', authMiddleware, ventasCtrl.resumen)
 router.get('/ventas', authMiddleware, ventasCtrl.listar)
 router.get('/ventas/:id', authMiddleware, ventasCtrl.obtener)
 router.post('/ventas', ventasCtrl.crear)
-router.patch('/ventas/:id/estado', ventasCtrl.cambiarEstado)
+router.patch('/ventas/:id/estado', authMiddleware, ventasCtrl.cambiarEstado)
 
 // ── INVENTARIO ────────────────────────────────────────────────
 router.post('/inventario/movimiento', authMiddleware, inventarioCtrl.registrarMovimiento)
