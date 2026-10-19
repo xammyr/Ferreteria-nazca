@@ -1,8 +1,12 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { CarritoProvider } from './context/CarritoContext'
 import { ClienteAuthProvider, useClienteAuth } from './context/ClienteAuthContext'
 import { AdminAuthProvider, useAdminAuth } from './context/AdminAuthContext'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import CartDrawer from './components/CartDrawer'
+import QuickViewModal from './components/QuickViewModal'
 import Home from './pages/Home'
 import Productos from './pages/Productos'
 import Producto from './pages/Producto'
@@ -15,13 +19,39 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminVentas from './pages/admin/AdminVentas'
 import AdminInventario from './pages/admin/AdminInventario'
 import AdminReportes from './pages/admin/AdminReportes'
+import { Loader2 } from 'lucide-react'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [pathname])
+  return null
+}
+
+function FullScreenLoader() {
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '65vh',
+      gap: '12px',
+      color: '#475569'
+    }}>
+      <Loader2 size={34} className="animate-spin" color="#F5C100" />
+      <span style={{ fontSize: '13px', fontWeight: '500' }}>Cargando...</span>
+    </div>
+  )
+}
 
 // Ruta protegida para clientes
 function RutaProtegida({ children }) {
   const { cliente, cargando } = useClienteAuth()
   const location = useLocation()
 
-  if (cargando) return <div style={{ textAlign: 'center', padding: '80px', fontSize: '32px' }}>⏳</div>
+  if (cargando) return <FullScreenLoader />
   if (!cliente) return <Navigate to="/login" state={{ from: location.pathname }} />
   return children
 }
@@ -30,7 +60,7 @@ function RutaProtegida({ children }) {
 function RutaProtegidaAdmin({ children }) {
   const { admin, cargando } = useAdminAuth()
 
-  if (cargando) return <div style={{ textAlign: 'center', padding: '80px', fontSize: '32px' }}>⏳</div>
+  if (cargando) return <FullScreenLoader />
   if (!admin) return <Navigate to="/admin/login" replace />
   return children
 }
@@ -41,6 +71,7 @@ export default function App() {
       <ClienteAuthProvider>
         <CarritoProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               {/* Portal Administrativo (Backoffice) */}
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -55,23 +86,28 @@ export default function App() {
 
               {/* Tienda Web Pública y Clientes */}
               <Route path="/*" element={
-                <>
+                <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
                   <Navbar />
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/productos" element={<Productos />} />
-                    <Route path="/producto/:id" element={<Producto />} />
-                    <Route path="/carrito" element={<Carrito />} />
-                    <Route path="/login" element={<LoginCliente />} />
-                    <Route path="/checkout" element={
-                      <RutaProtegida><Checkout /></RutaProtegida>
-                    } />
-                    <Route path="/mis-pedidos" element={
-                      <RutaProtegida><MisPedidos /></RutaProtegida>
-                    } />
-                    <Route path="*" element={<Navigate to="/" />} />
-                  </Routes>
-                </>
+                  <CartDrawer />
+                  <QuickViewModal />
+                  <main style={{ flex: 1 }}>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/productos" element={<Productos />} />
+                      <Route path="/producto/:id" element={<Producto />} />
+                      <Route path="/carrito" element={<Carrito />} />
+                      <Route path="/login" element={<LoginCliente />} />
+                      <Route path="/checkout" element={
+                        <RutaProtegida><Checkout /></RutaProtegida>
+                      } />
+                      <Route path="/mis-pedidos" element={
+                        <RutaProtegida><MisPedidos /></RutaProtegida>
+                      } />
+                      <Route path="*" element={<Navigate to="/" />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </div>
               } />
             </Routes>
           </BrowserRouter>

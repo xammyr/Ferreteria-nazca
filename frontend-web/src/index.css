@@ -1,39 +1,154 @@
-* { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'IBM Plex Sans', sans-serif; background-color: #f9fafb; color: #111827; overflow-x: hidden; }
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
-/* ── ANIMACIONES GLOBALES – Ferretería Nasca ─────────────────────────── */
-
-/* Fade in desde abajo — para cards y secciones */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Fade in simple — para el hero */
+:root {
+  --brand-yellow: #F5C100;
+  --brand-yellow-hover: #E0B000;
+  --brand-yellow-light: rgba(245, 193, 0, 0.12);
+  --brand-dark: #0f172a;
+  --brand-slate: #1e293b;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 16px 36px rgba(15, 23, 42, 0.12);
+  --shadow-yellow: 0 8px 24px rgba(245, 193, 0, 0.28);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── KEYFRAMES GLOBALES ──────────────────────────────────────────────── */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-/* Pulso suave — para el badge del hero */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.7; }
-}
-
-/* Scale in — para botones al hacer hover */
 @keyframes scaleIn {
-  from { transform: scale(0.95); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* ── CLASES DE ANIMACIÓN ─────────────────────────────────────────────── */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUpToast {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.82; transform: scale(0.98); }
+}
+
+@keyframes cartBounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.32) rotate(-6deg); }
+  60%  { transform: scale(0.9) rotate(4deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulseRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── CLASES DE UTILIDAD Y ANIMACIÓN ──────────────────────────────────── */
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.anim-page {
+  animation: fadeIn 0.35s ease forwards;
+}
 
 .anim-hero {
-  animation: fadeIn 0.8s ease forwards;
+  animation: fadeIn 0.6s ease forwards;
 }
 
 .anim-hero-text {
-  animation: fadeInUp 0.7s ease forwards;
+  animation: fadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .anim-badge {
@@ -42,106 +157,280 @@
 
 .anim-section {
   opacity: 0;
-  animation: fadeInUp 0.6s ease forwards;
+  animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.anim-card {
+.anim-modal-backdrop {
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.anim-modal-content {
+  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-drawer-right {
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-drawer-left {
+  animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-toast {
+  animation: slideUpToast 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.cart-bounce {
+  animation: cartBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── TARJETAS DE PRODUCTO Y CATEGORÍA ────────────────────────────────── */
+
+.anim-card,
+.product-card {
   opacity: 0;
-  animation: fadeInUp 0.5s ease forwards;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
+  position: relative;
 }
 
-.anim-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(245, 193, 0, 0.12);
+.anim-card:hover,
+.product-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--brand-yellow);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.09), 0 4px 12px rgba(245, 193, 0, 0.12);
+}
+
+.product-card-img-wrap {
+  position: relative;
+  overflow: hidden;
+  background: #f8fafc;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.product-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .product-card-img,
+.anim-card:hover .product-card-img {
+  transform: scale(1.08);
+}
+
+.quick-view-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: var(--brand-slate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.product-card:hover .quick-view-btn,
+.anim-card:hover .quick-view-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quick-view-btn:hover {
+  background: var(--brand-yellow);
+  border-color: var(--brand-yellow);
+  transform: scale(1.1) !important;
 }
 
 .anim-cat-card {
   opacity: 0;
-  animation: fadeInUp 0.4s ease forwards;
-  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              background 0.2s ease,
+              box-shadow 0.2s ease;
 }
 
 .anim-cat-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  border-color: var(--brand-yellow) !important;
+  box-shadow: 0 8px 20px rgba(245, 193, 0, 0.14);
 }
 
-/* Delays escalonados para cards */
-.delay-1  { animation-delay: 0.05s; }
-.delay-2  { animation-delay: 0.10s; }
-.delay-3  { animation-delay: 0.15s; }
-.delay-4  { animation-delay: 0.20s; }
-.delay-5  { animation-delay: 0.25s; }
-.delay-6  { animation-delay: 0.30s; }
-.delay-7  { animation-delay: 0.35s; }
-.delay-8  { animation-delay: 0.40s; }
-.delay-9  { animation-delay: 0.45s; }
-.delay-10 { animation-delay: 0.50s; }
-.delay-11 { animation-delay: 0.55s; }
-.delay-12 { animation-delay: 0.60s; }
+/* Delays escalonados */
+.delay-1  { animation-delay: 0.04s; }
+.delay-2  { animation-delay: 0.08s; }
+.delay-3  { animation-delay: 0.12s; }
+.delay-4  { animation-delay: 0.16s; }
+.delay-5  { animation-delay: 0.20s; }
+.delay-6  { animation-delay: 0.24s; }
+.delay-7  { animation-delay: 0.28s; }
+.delay-8  { animation-delay: 0.32s; }
+.delay-9  { animation-delay: 0.36s; }
+.delay-10 { animation-delay: 0.40s; }
+.delay-11 { animation-delay: 0.44s; }
+.delay-12 { animation-delay: 0.48s; }
 
-/* ── BOTONES ──────────────────────────────────────────────────────────── */
+/* ── SKELETON LOADERS ────────────────────────────────────────────────── */
+
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+/* ── BOTONES INTERACTIVOS ────────────────────────────────────────────── */
 
 .btn-primary {
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  background: var(--brand-yellow);
+  color: #111827;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.18s ease,
+              background-color 0.18s ease;
 }
-.btn-primary:hover {
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--brand-yellow-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 193, 0, 0.35);
+  box-shadow: var(--shadow-yellow);
 }
-.btn-primary:active {
-  transform: translateY(0);
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-.btn-secondary:hover {
-  border-color: rgba(245,193,0,0.5) !important;
-  color: #F5C100 !important;
+  transition: all 0.18s ease;
 }
 
-/* ── NAVBAR ───────────────────────────────────────────────────────────── */
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--brand-yellow) !important;
+  color: var(--brand-yellow) !important;
+  transform: translateY(-2px);
+}
+
+.btn-outline-light {
+  transition: all 0.2s ease;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+/* ── INPUTS Y FORMULARIOS ────────────────────────────────────────────── */
+
+.input-modern {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.input-modern:focus {
+  border-color: var(--brand-yellow) !important;
+  box-shadow: 0 0 0 3px rgba(245, 193, 0, 0.2) !important;
+  background-color: #ffffff !important;
+}
+
+/* ── NAVBAR & HERO ───────────────────────────────────────────────────── */
+
 .nav-link-anim {
-  transition: color 0.15s ease;
+  position: relative;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
+
 .nav-link-anim:hover {
-  color: #F5C100 !important;
+  color: #111827 !important;
+  background-color: rgba(245, 193, 0, 0.12);
 }
 
-/* ── IMAGEN DEL LOCAL (hero) ─────────────────────────────────────────── */
 .hero-img-anim {
-  animation: fadeInUp 0.9s ease 0.3s both;
-  transition: transform 0.3s ease;
-}
-.hero-img-anim:hover {
-  transform: scale(1.02);
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both, floatSlow 6s ease-in-out 1s infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* ── CARRUSEL ─────────────────────────────────────────────────────────── */
-.carousel-btn {
-  transition: transform 0.15s ease, background 0.15s ease;
+.hero-img-anim:hover {
+  transform: scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
 }
+
+.carousel-btn {
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
 .carousel-btn:hover {
   transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* ── BANNER YAPE ──────────────────────────────────────────────────────── */
 .banner-yape {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.banner-yape:hover {
-  border-color: rgba(245,193,0,0.4) !important;
-  box-shadow: 0 4px 20px rgba(245,193,0,0.08);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* ── SCROLL SUAVE GLOBAL ─────────────────────────────────────────────── */
-html {
-  scroll-behavior: smooth;
+.banner-yape:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 193, 0, 0.6) !important;
+  box-shadow: 0 12px 30px rgba(245, 193, 0, 0.14);
+}
+
+/* ── WHATSAPP FLOATING BUTTON ────────────────────────────────────────── */
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  text-decoration: none;
+  animation: pulseRing 2.2s infinite;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1) translateY(-3px);
+}
+
+/* ── TABLAS ADMIN ────────────────────────────────────────────────────── */
+
+.admin-table-row {
+  transition: background-color 0.15s ease;
+}
+
+.admin-table-row:hover {
+  background-color: #f8fafc;
 }
 
 /* ── SCROLLBAR PERSONALIZADA ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #f3f4f6; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #F5C100; }

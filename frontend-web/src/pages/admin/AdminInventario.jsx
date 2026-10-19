@@ -1,5 +1,5 @@
-import { Package, Search, Plus, Filter, Download, X, Eye, Check, Truck, AlertCircle, Clock, CheckCircle2, ChevronRight, Edit, Trash2 } from 'lucide-react'
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { Search, Package, X, PlusCircle, MinusCircle } from 'lucide-react'
 import api from '../../services/api'
 
 export default function AdminInventario() {
@@ -35,7 +35,6 @@ export default function AdminInventario() {
         cantidad: parseInt(cantidad),
         referencia: referencia || `Ajuste manual ${tipoMov}`
       })
-      alert('¡Movimiento de inventario registrado con éxito!')
       setModalProd(null)
       setCantidad(1)
       setReferencia('')
@@ -48,45 +47,70 @@ export default function AdminInventario() {
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+    <div className="anim-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>Control de Inventario & Stock</h1>
-          <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>Monitoreo de existencias y registro de entradas/salidas</p>
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0' }}>Control de Inventario & Stock</h1>
+          <p style={{ fontSize: '13.5px', color: '#64748b', margin: 0 }}>Monitoreo de existencias y registro de entradas o salidas de almacén</p>
         </div>
 
-        <input
-          type="text"
-          placeholder="Buscar producto por nombre o código..."
-          value={buscar}
-          onChange={e => setBuscar(e.target.value)}
-          style={{
-            padding: '9px 14px', background: '#ffffff', border: '1px solid #333', borderRadius: '8px',
-            color: '#1f2937', fontSize: '13px', outline: 'none', width: '280px'
-          }}
-        />
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: '#ffffff',
+          border: '1px solid #cbd5e1',
+          borderRadius: '10px',
+          padding: '0 12px',
+          width: '300px'
+        }}>
+          <Search size={16} color="#64748b" />
+          <input
+            type="text"
+            placeholder="Buscar por nombre o código..."
+            value={buscar}
+            onChange={e => setBuscar(e.target.value)}
+            style={{
+              flex: 1,
+              padding: '10px',
+              background: 'transparent',
+              border: 'none',
+              color: '#0f172a',
+              fontSize: '13px',
+              outline: 'none'
+            }}
+          />
+          {buscar && (
+            <button onClick={() => setBuscar('')} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex' }}>
+              <X size={14} />
+            </button>
+          )}
+        </div>
       </div>
 
       {cargando ? (
-        <div style={{ textAlign: 'center', padding: '60px', fontSize: '28px' }}>⏳ Cargando inventario...</div>
+        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {[1, 2, 3, 4, 5, 6].map(n => (
+            <div key={n} className="skeleton" style={{ height: '42px', width: '100%' }} />
+          ))}
+        </div>
       ) : productos.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px', background: '#ffffff', borderRadius: '10px', color: '#4b5563' }}>
-          No se encontraron productos.
+        <div style={{ textAlign: 'center', padding: '60px', background: '#ffffff', borderRadius: '14px', border: '1px solid #e2e8f0', color: '#64748b' }}>
+          No se encontraron productos con ese criterio.
         </div>
       ) : (
-        <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', borderRadius: '10px', overflowX: 'auto' }}>
+        <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', boxShadow: '0 4px 14px rgba(15, 23, 42, 0.04)', borderRadius: '14px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid #282828', background: '#181818', color: '#6b7280' }}>
-                <th style={{ padding: '12px 16px' }}>Código</th>
-                <th style={{ padding: '12px 16px' }}>Producto</th>
-                <th style={{ padding: '12px 16px' }}>Categoría</th>
-                <th style={{ padding: '12px 16px' }}>Unidad</th>
-                <th style={{ padding: '12px 16px' }}>P. Venta</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center' }}>Stock Actual</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center' }}>Mínimo</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center' }}>Estado</th>
-                <th style={{ padding: '12px 16px', textAlign: 'right' }}>Acción</th>
+              <tr style={{ borderBottom: '2px solid #F5C100', background: '#0f172a', color: '#ffffff' }}>
+                <th style={{ padding: '14px 16px', fontWeight: '700' }}>Código</th>
+                <th style={{ padding: '14px 16px', fontWeight: '700' }}>Producto</th>
+                <th style={{ padding: '14px 16px', fontWeight: '700' }}>Categoría</th>
+                <th style={{ padding: '14px 16px', fontWeight: '700' }}>Unidad</th>
+                <th style={{ padding: '14px 16px', fontWeight: '700' }}>P. Venta</th>
+                <th style={{ padding: '14px 16px', textAlign: 'center', fontWeight: '700' }}>Stock Actual</th>
+                <th style={{ padding: '14px 16px', textAlign: 'center', fontWeight: '700' }}>Mínimo</th>
+                <th style={{ padding: '14px 16px', textAlign: 'center', fontWeight: '700' }}>Estado</th>
+                <th style={{ padding: '14px 16px', textAlign: 'right', fontWeight: '700' }}>Acción</th>
               </tr>
             </thead>
             <tbody>
@@ -95,31 +119,49 @@ export default function AdminInventario() {
                 const stockBajo = !sinStock && p.stock_actual <= (p.stock_minimo || 5)
 
                 return (
-                  <tr key={p.id} style={{ borderBottom: '1px solid #1f1f1f' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: '600', color: '#F5C100' }}>{p.codigo}</td>
-                    <td style={{ padding: '12px 16px', color: '#1f2937', fontWeight: '500' }}>{p.nombre}</td>
-                    <td style={{ padding: '12px 16px', color: '#aaa' }}>{p.categorias?.nombre || '—'}</td>
-                    <td style={{ padding: '12px 16px', color: '#6b7280' }}>{p.unidad || 'unidad'}</td>
-                    <td style={{ padding: '12px 16px', color: '#374151' }}>S/ {parseFloat(p.precio_venta).toFixed(2)}</td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: '700', fontSize: '14px', color: sinStock ? '#ef4444' : stockBajo ? '#f59e0b' : '#22c55e' }}>
+                  <tr key={p.id} className="admin-table-row" style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '12px 16px', fontWeight: '700', color: '#b45309' }}>{p.codigo}</td>
+                    <td style={{ padding: '12px 16px', color: '#0f172a', fontWeight: '600' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: '#f8fafc', border: '1px solid #e2e8f0', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {p.imagen_url ? (
+                            <img src={p.imagen_url} alt={p.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          ) : (
+                            <Package size={16} color="#94a3b8" />
+                          )}
+                        </div>
+                        <span>{p.nombre}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '12px 16px', color: '#64748b' }}>{p.categorias?.nombre || '—'}</td>
+                    <td style={{ padding: '12px 16px', color: '#64748b' }}>{p.unidad || 'unidad'}</td>
+                    <td style={{ padding: '12px 16px', color: '#0f172a', fontWeight: '700' }}>S/ {parseFloat(p.precio_venta).toFixed(2)}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', fontWeight: '800', fontSize: '14.5px', color: sinStock ? '#dc2626' : stockBajo ? '#d97706' : '#16a34a' }}>
                       {p.stock_actual}
                     </td>
-                    <td style={{ padding: '12px 16px', textAlign: 'center', color: '#6b7280' }}>{p.stock_minimo || 5}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: '#64748b' }}>{p.stock_minimo || 5}</td>
                     <td style={{ padding: '12px 16px', textAlign: 'center' }}>
                       <span style={{
-                        padding: '3px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '700',
-                        background: sinStock ? 'rgba(239,68,68,0.1)' : stockBajo ? 'rgba(245,158,11,0.1)' : 'rgba(34,197,94,0.1)',
-                        color: sinStock ? '#ef4444' : stockBajo ? '#f59e0b' : '#22c55e'
+                        padding: '4px 10px',
+                        borderRadius: '20px',
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        background: sinStock ? '#fef2f2' : stockBajo ? '#fffbeb' : '#f0fdf4',
+                        color: sinStock ? '#dc2626' : stockBajo ? '#d97706' : '#16a34a',
+                        border: `1px solid ${sinStock ? '#fecaca' : stockBajo ? '#fde68a' : '#bbf7d0'}`
                       }}>
-                        {sinStock ? 'SIN STOCK' : stockBajo ? 'STOCK BAJO' : 'OK'}
+                        {sinStock ? 'SIN STOCK' : stockBajo ? 'STOCK BAJO' : 'ÓPTIMO'}
                       </span>
                     </td>
                     <td style={{ padding: '12px 16px', textAlign: 'right' }}>
                       <button
                         onClick={() => setModalProd(p)}
+                        className="btn-primary"
                         style={{
-                          background: '#1f1f1f', border: '1px solid #333', color: '#F5C100', padding: '6px 12px',
-                          borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer'
+                          padding: '7px 13px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: '700'
                         }}
                       >
                         ± Ajustar Stock
@@ -133,100 +175,183 @@ export default function AdminInventario() {
         </div>
       )}
 
-      {/* Modal para Ajustar Stock */}
+      {/* Modal para Ajustar Stock (Tema Claro Industrial) */}
       {modalProd && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(0,0,0,0.8)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
-        }} onClick={() => setModalProd(null)}>
-          <div style={{
-            background: '#161616', border: '1px solid #2e2e2e', borderRadius: '12px', padding: '24px',
-            maxWidth: '440px', width: '100%', boxShadow: '0 8px 30px rgba(0,0,0,0.7)'
-          }} onClick={e => e.stopPropagation()}>
-            <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>
-              Ajustar Inventario: {modalProd.nombre}
-            </h2>
-            <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 18px 0' }}>
-              Stock actual: <strong style={{ color: '#F5C100' }}>{modalProd.stock_actual} {modalProd.unidad}</strong>
-            </p>
-
-            <form onSubmit={handleRegistrarMovimiento} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div
+          className="anim-modal-backdrop"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 999,
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}
+          onClick={() => setModalProd(null)}
+        >
+          <div
+            className="anim-modal-content"
+            style={{
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '16px',
+              padding: '28px',
+              maxWidth: '450px',
+              width: '100%',
+              boxShadow: '0 24px 48px rgba(15, 23, 42, 0.25)'
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: '#4b5563', marginBottom: '6px' }}>Tipo de Movimiento</label>
+                <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0' }}>
+                  Ajustar Stock
+                </h2>
+                <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>
+                  {modalProd.nombre} · Actual: <strong style={{ color: '#0f172a' }}>{modalProd.stock_actual} {modalProd.unidad}</strong>
+                </p>
+              </div>
+              <button
+                onClick={() => setModalProd(null)}
+                style={{ background: '#f1f5f9', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', color: '#475569', display: 'flex' }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleRegistrarMovimiento} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  Tipo de Movimiento
+                </label>
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button
                     type="button"
                     onClick={() => setTipoMov('entrada')}
                     style={{
-                      flex: 1, padding: '9px', borderRadius: '6px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
-                      border: tipoMov === 'entrada' ? '2px solid #22c55e' : '1px solid #333',
-                      background: tipoMov === 'entrada' ? 'rgba(34,197,94,0.1)' : '#1f1f1f',
-                      color: tipoMov === 'entrada' ? '#22c55e' : '#aaa'
+                      flex: 1,
+                      padding: '10px',
+                      borderRadius: '10px',
+                      fontSize: '13px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      border: tipoMov === 'entrada' ? '2px solid #16a34a' : '1px solid #cbd5e1',
+                      background: tipoMov === 'entrada' ? '#f0fdf4' : '#f8fafc',
+                      color: tipoMov === 'entrada' ? '#15803d' : '#64748b',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
                     }}
                   >
-                    + Entrada (Compra)
+                    <PlusCircle size={16} /> Entrada (Compra)
                   </button>
                   <button
                     type="button"
                     onClick={() => setTipoMov('salida')}
                     style={{
-                      flex: 1, padding: '9px', borderRadius: '6px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
-                      border: tipoMov === 'salida' ? '2px solid #ef4444' : '1px solid #333',
-                      background: tipoMov === 'salida' ? 'rgba(239,68,68,0.1)' : '#1f1f1f',
-                      color: tipoMov === 'salida' ? '#ef4444' : '#aaa'
+                      flex: 1,
+                      padding: '10px',
+                      borderRadius: '10px',
+                      fontSize: '13px',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      border: tipoMov === 'salida' ? '2px solid #dc2626' : '1px solid #cbd5e1',
+                      background: tipoMov === 'salida' ? '#fef2f2' : '#f8fafc',
+                      color: tipoMov === 'salida' ? '#dc2626' : '#64748b',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
                     }}
                   >
-                    - Salida (Merma / Ajuste)
+                    <MinusCircle size={16} /> Salida / Ajuste
                   </button>
                 </div>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: '#4b5563', marginBottom: '6px' }}>Cantidad</label>
+                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  Cantidad a {tipoMov === 'entrada' ? 'ingresar' : 'retirar'}
+                </label>
                 <input
                   type="number"
                   min="1"
                   value={cantidad}
                   onChange={e => setCantidad(e.target.value)}
                   required
+                  className="input-modern"
                   style={{
-                    width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb',
-                    border: '1px solid #333', borderRadius: '6px', color: '#1f2937', fontSize: '14px'
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    padding: '11px 14px',
+                    background: '#f8fafc',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '10px',
+                    color: '#0f172a',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    outline: 'none'
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', color: '#4b5563', marginBottom: '6px' }}>Motivo / Referencia</label>
+                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  Motivo / Referencia
+                </label>
                 <input
                   type="text"
-                  placeholder="Ej: Factura de proveedor #402, corrección de inventario..."
+                  placeholder="Ej: Guía de remisión #402, reposición de almacén..."
                   value={referencia}
                   onChange={e => setReferencia(e.target.value)}
+                  className="input-modern"
                   style={{
-                    width: '100%', boxSizing: 'border-box', padding: '10px 12px', background: '#f9fafb',
-                    border: '1px solid #333', borderRadius: '6px', color: '#1f2937', fontSize: '13px'
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    padding: '11px 14px',
+                    background: '#f8fafc',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '10px',
+                    color: '#0f172a',
+                    fontSize: '13.5px',
+                    outline: 'none'
                   }}
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button
                   type="button"
                   onClick={() => setModalProd(null)}
-                  style={{ padding: '8px 14px', borderRadius: '6px', background: 'transparent', border: '1px solid #333', color: '#6b7280', cursor: 'pointer' }}
+                  style={{
+                    padding: '10px 16px',
+                    borderRadius: '10px',
+                    background: '#ffffff',
+                    border: '1px solid #cbd5e1',
+                    color: '#475569',
+                    fontWeight: '600',
+                    fontSize: '13px',
+                    cursor: 'pointer'
+                  }}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={enviando}
+                  className="btn-primary"
                   style={{
-                    padding: '8px 18px', borderRadius: '6px', background: '#F5C100', color: '#1f2937',
-                    border: 'none', fontWeight: '700', fontSize: '13px', cursor: enviando ? 'wait' : 'pointer'
+                    padding: '10px 20px',
+                    borderRadius: '10px',
+                    fontWeight: '700',
+                    fontSize: '13.5px'
                   }}
                 >
-                  {enviando ? 'Guardando...' : 'Confirmar Ajuste'}
+                  {enviando ? 'Guardando...' : 'Confirmar Movimiento'}
                 </button>
               </div>
             </form>

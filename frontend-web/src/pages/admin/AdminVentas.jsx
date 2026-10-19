@@ -1,13 +1,13 @@
-import { Package, Search, Plus, Filter, Download, X, Eye, Check, Truck, AlertCircle, Clock, CheckCircle2, ChevronRight, Edit, Trash2 } from 'lucide-react'
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { X, Eye, Check, Truck, Clock, CheckCircle2, FileText, ShoppingBag } from 'lucide-react'
 import api from '../../services/api'
 import { useSearchParams } from 'react-router-dom'
 
 const estados = {
-  pendiente:  { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', label: 'Pendiente', icon: <Clock size={12} style={{marginRight:'4px'}}/> },
-  pagado:     { color: '#22c55e', bg: 'rgba(34,197,94,0.1)',  label: 'Pagado', icon: <CheckCircle2 size={12} style={{marginRight:'4px'}}/> },
-  despachado: { color: '#38bdf8', bg: 'rgba(56,189,248,0.1)', label: 'Despachado', icon: <Truck size={12} style={{marginRight:'4px'}}/> },
-  cancelado:  { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',  label: 'Cancelado', icon: <X size={12} style={{marginRight:'4px'}}/> },
+  pendiente:  { color: '#d97706', bg: '#fffbeb', border: '#fde68a', label: 'Pendiente', icon: <Clock size={13} /> },
+  pagado:     { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', label: 'Pagado', icon: <CheckCircle2 size={13} /> },
+  despachado: { color: '#0284c7', bg: '#f0f9ff', border: '#bae6fd', label: 'Despachado', icon: <Truck size={13} /> },
+  cancelado:  { color: '#dc2626', bg: '#fef2f2', border: '#fecaca', label: 'Cancelado', icon: <X size={13} /> },
 }
 
 export default function AdminVentas() {
@@ -44,99 +44,141 @@ export default function AdminVentas() {
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+    <div className="anim-page">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '22px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#1f2937', margin: '0 0 6px 0' }}>Gestión de Pedidos & Ventas</h1>
-          <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>Validación de pagos Yape y despacho de mercadería</p>
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0' }}>Gestión de Pedidos & Ventas</h1>
+          <p style={{ fontSize: '13.5px', color: '#64748b', margin: 0 }}>Validación de pagos por Yape y control de despacho</p>
         </div>
 
         {/* Filtros de Estado */}
-        <div style={{ display: 'flex', gap: '6px', background: '#ffffff', padding: '4px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+        <div style={{ display: 'flex', gap: '6px', background: '#ffffff', padding: '5px', borderRadius: '10px', border: '1px solid #e2e8f0', flexWrap: 'wrap' }}>
           {[
             { key: '', label: 'Todos' },
             { key: 'pendiente', label: 'Pendientes' },
             { key: 'pagado', label: 'Pagados' },
             { key: 'despachado', label: 'Despachados' },
             { key: 'cancelado', label: 'Cancelados' },
-          ].map(f => (
-            <button
-              key={f.key}
-              onClick={() => setSearchParams(f.key ? { estado: f.key } : {})}
-              style={{
-                padding: '7px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600',
-                background: estadoFiltro === f.key ? '#F5C100' : 'transparent',
-                color: estadoFiltro === f.key ? '#f9fafb' : '#6b7280',
-                border: 'none', cursor: 'pointer'
-              }}
-            >
-              {f.label}
-            </button>
-          ))}
+          ].map(f => {
+            const activo = estadoFiltro === f.key
+            return (
+              <button
+                key={f.key}
+                onClick={() => setSearchParams(f.key ? { estado: f.key } : {})}
+                style={{
+                  padding: '7px 14px',
+                  borderRadius: '8px',
+                  fontSize: '12.5px',
+                  fontWeight: activo ? '700' : '600',
+                  background: activo ? '#F5C100' : 'transparent',
+                  color: activo ? '#0f172a' : '#64748b',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {f.label}
+              </button>
+            )
+          })}
         </div>
       </div>
 
       {cargando ? (
-        <div style={{ textAlign: 'center', padding: '60px', fontSize: '28px' }}>⏳ Cargando pedidos...</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {[1, 2, 3].map(n => (
+            <div key={n} className="skeleton" style={{ height: '140px', borderRadius: '14px' }} />
+          ))}
+        </div>
       ) : ventas.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px', background: '#ffffff', borderRadius: '10px', color: '#4b5563' }}>
-          No hay pedidos en este estado.
+        <div style={{ textAlign: 'center', padding: '64px 20px', background: '#ffffff', borderRadius: '14px', border: '1px solid #e2e8f0', color: '#64748b' }}>
+          <ShoppingBag size={36} style={{ marginBottom: '10px', color: '#94a3b8' }} />
+          <div style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>No hay pedidos en este estado</div>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {ventas.map(v => {
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {ventas.map((v, idx) => {
             const est = estados[v.estado] || estados.pendiente
             const esPendiente = v.estado === 'pendiente'
 
             return (
-              <div key={v.id} style={{
-                background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', borderRadius: '10px', padding: '18px 20px',
-                display: 'flex', flexDirection: 'column', gap: '14px'
-              }}>
+              <div
+                key={v.id}
+                className={`anim-section delay-${Math.min((idx % 10) + 1, 10)}`}
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: '0 4px 12px rgba(15, 23, 42, 0.03)',
+                  borderRadius: '14px',
+                  padding: '20px 22px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '14px'
+                }}
+              >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '16px', fontWeight: '700', color: '#1f2937' }}>#{v.numero}</span>
-                    <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '600', background: est.bg, color: est.color }}>
-                      {est.label}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a' }}>#{v.numero}</span>
+                    <span style={{
+                      padding: '4px 11px',
+                      borderRadius: '20px',
+                      fontSize: '11.5px',
+                      fontWeight: '700',
+                      background: est.bg,
+                      color: est.color,
+                      border: `1px solid ${est.border}`,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}>
+                      {est.icon} {est.label}
                     </span>
-                    <span style={{ fontSize: '12px', color: '#4b5563' }}>
+                    <span style={{ fontSize: '12.5px', color: '#64748b' }}>
                       {new Date(v.creado_en).toLocaleDateString('es-PE', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    <span style={{ fontSize: '11px', background: '#f3f4f6', padding: '2px 8px', borderRadius: '4px', color: '#6b7280' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '600', background: '#f1f5f9', padding: '3px 9px', borderRadius: '6px', color: '#475569', textTransform: 'uppercase' }}>
                       Canal: {v.canal}
                     </span>
                   </div>
 
-                  <div style={{ fontSize: '20px', fontWeight: '700', color: '#F5C100' }}>
+                  <div style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a' }}>
                     S/ {parseFloat(v.total).toFixed(2)}
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', borderTop: '1px solid #e5e7eb', paddingTop: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px', borderTop: '1px solid #f1f5f9', paddingTop: '14px' }}>
                   {/* Datos del Cliente y Notas */}
                   <div>
-                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '4px' }}>Cliente / Contacto</div>
-                    <div style={{ fontSize: '13px', color: '#374151' }}>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                      Cliente / Contacto
+                    </div>
+                    <div style={{ fontSize: '13.5px', color: '#334155', lineHeight: 1.45 }}>
                       {v.clientes ? (
                         <>
-                          <strong>{v.clientes.nombre}</strong> ({v.clientes.telefono || 'Sin teléfono'})<br />
-                          <span style={{ color: '#6b7280', fontSize: '12px' }}>{v.clientes.email} | {v.clientes.direccion || 'Sin dirección'}</span>
+                          <strong style={{ color: '#0f172a' }}>{v.clientes.nombre}</strong> ({v.clientes.telefono || 'Sin teléfono'})<br />
+                          <span style={{ color: '#64748b', fontSize: '12.5px' }}>{v.clientes.email} · {v.clientes.direccion || 'Sin dirección'}</span>
                         </>
                       ) : (
                         <span>Venta en Tienda (Presencial)</span>
                       )}
                     </div>
-                    {v.notas && <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '6px', fontStyle: 'italic' }}><Edit size={12} style={{marginRight:'4px'}}/> {v.notas}</div>}
+                    {v.notas && (
+                      <div style={{ fontSize: '12px', color: '#64748b', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <FileText size={13} /> {v.notas}
+                      </div>
+                    )}
                   </div>
 
                   {/* Ítems comprados */}
                   <div>
-                    <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', marginBottom: '4px' }}>Detalle de Productos</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                      Detalle de Productos
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       {v.venta_items?.map(it => (
-                        <div key={it.id} style={{ fontSize: '12.5px', color: '#4b5563', display: 'flex', justifyContent: 'space-between' }}>
-                          <span>• {it.nombre_producto} <strong>x{it.cantidad}</strong></span>
-                          <span style={{ color: '#6b7280' }}>S/ {parseFloat(it.subtotal).toFixed(2)}</span>
+                        <div key={it.id} style={{ fontSize: '13px', color: '#334155', display: 'flex', justifyContent: 'space-between' }}>
+                          <span>• {it.nombre_producto} <strong style={{ color: '#64748b' }}>x{it.cantidad}</strong></span>
+                          <span style={{ color: '#0f172a', fontWeight: '600' }}>S/ {parseFloat(it.subtotal).toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
@@ -145,36 +187,59 @@ export default function AdminVentas() {
 
                 {/* Barra de Acciones y Comprobante */}
                 <div style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px',
-                  borderTop: '1px solid #e5e7eb', paddingTop: '12px'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '12px',
+                  borderTop: '1px solid #f1f5f9',
+                  paddingTop: '14px'
                 }}>
                   <div>
                     {v.comprobante_url ? (
                       <button
                         onClick={() => setModalImg(v.comprobante_url)}
                         style={{
-                          background: 'rgba(245,193,0,0.1)', border: '1px solid rgba(245,193,0,0.3)', color: '#F5C100',
-                          padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer'
+                          background: 'rgba(245, 193, 0, 0.16)',
+                          border: '1px solid rgba(245, 193, 0, 0.45)',
+                          color: '#0f172a',
+                          padding: '7px 14px',
+                          borderRadius: '8px',
+                          fontSize: '12.5px',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px'
                         }}
                       >
-                        👁️ Ver Comprobante Yape
+                        <Eye size={15} color="#b45309" /> Ver Comprobante Yape
                       </button>
                     ) : (
-                      <span style={{ fontSize: '12px', color: '#4b5563' }}>Sin comprobante adjunto</span>
+                      <span style={{ fontSize: '12.5px', color: '#94a3b8' }}>Sin comprobante adjunto</span>
                     )}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {esPendiente && (
                       <button
                         disabled={accionandoId === v.id}
                         onClick={() => handleCambiarEstado(v.id, 'pagado')}
                         style={{
-                          background: '#22c55e', color: '#1f2937', border: 'none', padding: '7px 14px', borderRadius: '6px',
-                          fontSize: '12px', fontWeight: '700', cursor: 'pointer'
+                          background: '#16a34a',
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '8px 15px',
+                          borderRadius: '8px',
+                          fontSize: '12.5px',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
                         }}
                       >
-                        ✓ Aprobar Pago
+                        <Check size={15} /> Aprobar Pago
                       </button>
                     )}
 
@@ -183,11 +248,20 @@ export default function AdminVentas() {
                         disabled={accionandoId === v.id}
                         onClick={() => handleCambiarEstado(v.id, 'despachado')}
                         style={{
-                          background: '#38bdf8', color: '#1f2937', border: 'none', padding: '7px 14px', borderRadius: '6px',
-                          fontSize: '12px', fontWeight: '700', cursor: 'pointer'
+                          background: '#0284c7',
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '8px 15px',
+                          borderRadius: '8px',
+                          fontSize: '12.5px',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
                         }}
                       >
-                        🚚 Despachar
+                        <Truck size={15} /> Marcar Despachado
                       </button>
                     )}
 
@@ -196,11 +270,17 @@ export default function AdminVentas() {
                         disabled={accionandoId === v.id}
                         onClick={() => handleCambiarEstado(v.id, 'cancelado')}
                         style={{
-                          background: 'transparent', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)',
-                          padding: '6px 12px', borderRadius: '6px', fontSize: '12px', cursor: 'pointer'
+                          background: '#fef2f2',
+                          color: '#dc2626',
+                          border: '1px solid #fecaca',
+                          padding: '7px 13px',
+                          borderRadius: '8px',
+                          fontSize: '12.5px',
+                          fontWeight: '600',
+                          cursor: 'pointer'
                         }}
                       >
-                        ✕ Cancelar
+                        Cancelar
                       </button>
                     )}
                   </div>
@@ -213,20 +293,45 @@ export default function AdminVentas() {
 
       {/* Modal para ver comprobante a pantalla completa */}
       {modalImg && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(0,0,0,0.85)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
-        }} onClick={() => setModalImg(null)}>
-          <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
-            <img src={modalImg} alt="Comprobante Yape" style={{ maxWidth: '100%', maxHeight: '85vh', borderRadius: '10px', boxShadow: '0 10px 40px rgba(0,0,0,0.8)' }} />
+        <div
+          className="anim-modal-backdrop"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 999,
+            background: 'rgba(15, 23, 42, 0.82)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}
+          onClick={() => setModalImg(null)}
+        >
+          <div className="anim-modal-content" style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%' }} onClick={e => e.stopPropagation()}>
+            <img src={modalImg} alt="Comprobante Yape" style={{ maxWidth: '100%', maxHeight: '85vh', borderRadius: '14px', boxShadow: '0 20px 48px rgba(0,0,0,0.6)' }} />
             <button
               onClick={() => setModalImg(null)}
               style={{
-                position: 'absolute', top: '-12px', right: '-12px', background: '#F5C100', color: '#1f2937',
-                border: 'none', borderRadius: '50%', width: '32px', height: '32px', fontWeight: '700', fontSize: '16px', cursor: 'pointer'
+                position: 'absolute',
+                top: '-14px',
+                right: '-14px',
+                background: '#F5C100',
+                color: '#0f172a',
+                border: 'none',
+                borderRadius: '50%',
+                width: '36px',
+                height: '36px',
+                fontWeight: '800',
+                fontSize: '16px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
               }}
             >
-              ✕
+              <X size={18} />
             </button>
           </div>
         </div>
